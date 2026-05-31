@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lokesh Edits | Premium Video Editor & Storyteller</title>
+    <meta name="description" content="Portfolio of Lokesh Edits, a professional freelance video editor specializing in YouTube Shorts, commercials, motion graphics, and cinematic storytelling.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Loading Screen / Enter Splash -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loader-content">
+            <h1 class="loader-logo">LOKESH<span>EDITS</span></h1>
+            
+            <div id="loader-progress-area" class="loader-progress-area">
+                <div class="timeline-loader">
+                    <div class="timeline-track"></div>
+                    <div class="timeline-playhead"></div>
+                    <div class="timeline-bar"></div>
+                </div>
+                <p class="loader-status">Initializing timeline...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Looping Background Video -->
+    <div id="bg-video-container" class="bg-video-container">
+        <video id="bg-video" src="intro.mp4" playsinline preload="auto"></video>
+        <div class="bg-video-overlay"></div>
+    </div>
+
+    <!-- Ambient Grid & Particles for Cinematic Aesthetic -->
+    <div class="ambient-grid"></div>
+    <div class="vignette-overlay"></div>
+
+    <!-- Floating Audio Control -->
+    <button id="btn-audio-toggle" class="btn-audio-toggle hidden" aria-label="Toggle Sound">
+        <i class="fa-solid fa-volume-xmark"></i>
+        <span>Sound Off</span>
+    </button>
+
+    <!-- Main App Container -->
+    <div id="app-container" class="app-container hidden">
+        
+        <!-- Premium Navigation -->
+        <header class="main-header">
+            <a href="#" class="logo">LOKESH<span>EDITS</span></a>
+            <nav class="nav-menu">
+                <a href="#work" class="nav-link active">Work</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#contact" class="nav-link">Hire Me</a>
+            </nav>
+            <a href="#contact" class="btn-cta header-cta">Let's Collaborate</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </header>
+
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-bg-effects">
+                <div class="neon-light purple"></div>
+                <div class="neon-light blue"></div>
+            </div>
+            <div class="container hero-content">
+                <div class="tagline-badge">
+                    <span class="pulse-dot"></span>
+                    <span>Available for Freelance Projects</span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="line-1">VIDEO EDITOR &</span>
+                    <span class="line-2 text-gradient">STORYTELLER</span>
+                </h1>
+                <p class="hero-subtitle">
+                    I transform raw footage and ideas into high-engaging visual stories through cutting-edge editing, dynamic motion graphics, and Hollywood-grade color grading.
+                </p>
+                <div class="hero-actions">
+                    <a href="#work" class="btn-primary">
+                        <span>Explore Showcase</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="#contact" class="btn-secondary">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>Hire Me</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Showcase Section -->
+        <section id="work" class="portfolio-section reveal">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Showcase</span>
+                    <h2 class="section-title">Selected Projects</h2>
+                    <p class="section-desc">A curated selection of edits engineered to grab attention, build audiences, and drive conversions.</p>
+                </div>
+
+                <!-- Project Grid -->
+                <div class="portfolio-grid">
+                    <!-- Project 1 -->
+                    <div class="project-card" data-video="Sequence 01.mp4">
+                        <div class="project-media">
+                            <img src="assets/sequence_01.png" alt="Reel Edit - Sequence 01">
+                            <div class="project-overlay">
+                                <span class="play-icon"><i class="fa-solid fa-play"></i></span>
+                                <div class="project-meta">
+                                    <span class="project-category">Cinematic Showcase</span>
+                                    <h3 class="project-name">Sequence 01</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project 2 -->
+                    <div class="project-card" data-video="main sound.mp4">
+                        <div class="project-media">
+                            <img src="assets/main_sound.png" alt="Sound Design Edit - Main Sound">
+                            <div class="project-overlay">
+                                <span class="play-icon"><i class="fa-solid fa-play"></i></span>
+                                <div class="project-meta">
+                                    <span class="project-category">Sound Design</span>
+                                    <h3 class="project-name">Main Sound</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="services-section reveal">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Services</span>
+                    <h2 class="section-title">Post-Production Mastery</h2>
+                    <p class="section-desc">Taking projects from a raw folder of clips into a polished, high-retention masterpiece.</p>
+                </div>
+
+                <div class="services-grid">
+                    <!-- Service 1 -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-clapperboard"></i>
+                        </div>
+                        <h3 class="service-name">Creative Editing</h3>
+                        <p class="service-desc">Fluid pacing, multi-camera syncing, sound syncs, and storytelling structure tailored to hook viewers in the first 3 seconds.</p>
+                        <div class="card-timeline">
+                            <div class="timeline-clip clip-purple"></div>
+                            <div class="timeline-clip clip-blue"></div>
+                        </div>
+                    </div>
+                    <!-- Service 2 -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <h3 class="service-name">Motion Graphics</h3>
+                        <p class="service-desc">Custom transitions, kinetic typography, screen overlays, logo animations, and VFX inspired by After Effects styling.</p>
+                        <div class="card-timeline">
+                            <div class="timeline-keyframes">
+                                <span class="keyframe"></span>
+                                <span class="keyframe-line"></span>
+                                <span class="keyframe"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Service 3 -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                        </div>
+                        <h3 class="service-name">Cinematic Color</h3>
+                        <p class="service-desc">Professional color correction, skin-tone matching, and creative grading LUTs matching DaVinci/Premiere workflows.</p>
+                        <div class="card-timeline">
+                            <div class="color-wheel-visual">
+                                <div class="color-wheel-circle"></div>
+                                <div class="color-wheel-pointer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Service 4 -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </div>
+                        <h3 class="service-name">Sound Design</h3>
+                        <p class="service-desc">Audio leveling, ambient SFX, sub-bass impacts, swoshes, risers, custom audio ducking, and voiceover enhancement.</p>
+                        <div class="card-timeline">
+                            <div class="audio-waves-visual">
+                                <span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Stats Section -->
+        <section id="stats" class="stats-section reveal">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number" data-target="150">0</div>
+                        <div class="stat-label">Projects Completed</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" data-target="10">0</div>
+                        <div class="stat-label">Million+ Views Generated</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" data-target="50">0</div>
+                        <div class="stat-label">Happy Creators/Brands</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" data-target="5">0</div>
+                        <div class="stat-label">Years of Experience</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section reveal">
+            <div class="container">
+                <div class="contact-wrapper glass-panel">
+                    <div class="contact-info">
+                        <span class="section-tag">Let's Talk</span>
+                        <h2 class="contact-title">Ready to level up your content?</h2>
+                        <p class="contact-desc">Whether you need YouTube Shorts, ads, or high-end animations, let's craft a story that grabs attention and holds it.</p>
+                        
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <i class="fa-solid fa-envelope"></i>
+                                <div>
+                                    <h4>Email Me</h4>
+                                    <a href="mailto:rowwtulokesh1123@gmail.com">rowwtulokesh1123@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <div>
+                                    <h4>Based In</h4>
+                                    <p>India / Remote</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="social-links">
+                            <a href="https://www.instagram.com/lokesh__verse/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="contact-form-container">
+                        <form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+                            <input type="hidden" name="access_key" id="web3forms-access-key" value="06f92320-e0bb-4d4a-b86f-5ed9c65699a4">
+                            <input type="hidden" name="subject" value="New Portfolio Inquiry!">
+                            <input type="checkbox" name="botcheck" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name">Your Name</label>
+                                    <input type="text" id="name" name="name" required placeholder="John Doe">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" name="email" required placeholder="john@example.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="project-type">Project Type</label>
+                                <select id="project-type" name="project-type">
+                                    <option value="shorts">YouTube Shorts / Reels</option>
+                                    <option value="commercial">Commercial Video / Ads</option>
+                                    <option value="cinematic">Cinematic Video Project</option>
+                                    <option value="motion">Motion Graphics & Animation</option>
+                                    <option value="other">Other / Full Pack</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Project Details</label>
+                                <textarea id="message" name="message" rows="5" required placeholder="Tell me about your project, target audience, and editing style requirements..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit">
+                                <span>Send Message</span>
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="container footer-content">
+                <p>&copy; 2026 Lokesh Edits. All Rights Reserved. Crafted for Storytellers.</p>
+                <div class="footer-links">
+                    <a href="#work">Work</a>
+                    <a href="#services">Services</a>
+                    <a href="#contact">Hire Me</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Video Modal (For work preview playing) -->
+    <div id="video-modal" class="video-modal hidden">
+        <button class="modal-close" aria-label="Close modal"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-content glass-panel">
+            <div class="video-wrapper">
+                <video id="modal-video" controls playsinline src=""></video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include GSAP and Custom JS Modules -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
