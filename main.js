@@ -261,8 +261,16 @@ document.addEventListener('DOMContentLoaded', () => {
     projectCards.forEach(card => {
         card.addEventListener('click', () => {
             const videoUrl = card.getAttribute('data-video');
+            const isLandscape = card.getAttribute('data-aspect') === '16-9' || card.classList.contains('landscape-card');
             if (modalVideo && videoUrl) {
                 modalVideo.setAttribute('src', videoUrl);
+                
+                if (isLandscape) {
+                    videoModal.classList.add('modal-landscape');
+                } else {
+                    videoModal.classList.remove('modal-landscape');
+                }
+                
                 videoModal.classList.remove('hidden');
                 document.body.style.overflow = 'hidden'; // Lock page scroll
                 modalVideo.play().catch(e => console.log("Modal play blocked:", e));
@@ -276,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalVideo.setAttribute('src', '');
         }
         videoModal.classList.add('hidden');
+        videoModal.classList.remove('modal-landscape'); // Reset state
         document.body.style.overflow = 'auto'; // Unlock page scroll
     };
 

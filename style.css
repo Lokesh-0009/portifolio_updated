@@ -4,19 +4,19 @@
 
 /* Variables */
 :root {
-    --bg-dark: #070709;
-    --bg-card: rgba(15, 15, 20, 0.6);
-    --bg-header: rgba(7, 7, 9, 0.8);
+    --bg-dark: #ffffff; /* White background */
+    --bg-card: rgba(255, 255, 255, 0.75); /* Translucent White */
+    --bg-header: rgba(255, 255, 255, 0.85);
     
-    --color-primary: #8b5cf6; /* Neon Purple */
-    --color-secondary: #06b6d4; /* Cyber Cyan */
-    --color-accent: #f43f5e; /* Cyber Pink/Crimson */
-    --color-text: #f8fafc;
-    --color-text-muted: #94a3b8;
+    --color-primary: #6d28d9; /* Deep Purple */
+    --color-secondary: #0891b2; /* Cyber Cyan */
+    --color-accent: #e11d48; /* Cyber Pink */
+    --color-text: #0f172a; /* Slate 900 */
+    --color-text-muted: #475569; /* Slate 600 */
     
-    --border-color: rgba(255, 255, 255, 0.05);
-    --border-glow-purple: rgba(139, 92, 246, 0.15);
-    --border-glow-blue: rgba(6, 182, 212, 0.15);
+    --border-color: rgba(0, 0, 0, 0.08);
+    --border-glow-purple: rgba(109, 40, 217, 0.1);
+    --border-glow-blue: rgba(8, 145, 178, 0.1);
     
     --font-heading: 'Outfit', sans-serif;
     --font-body: 'Inter', sans-serif;
@@ -76,7 +76,7 @@ body {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--border-color);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
     border-radius: 16px;
 }
 
@@ -122,7 +122,7 @@ body {
 .loading-screen {
     position: fixed;
     inset: 0;
-    background: #030304;
+    background: #ffffff;
     z-index: 9999;
     display: flex;
     justify-content: center;
@@ -142,6 +142,7 @@ body {
     font-size: 2.25rem;
     letter-spacing: 1.5px;
     margin-bottom: 1.5rem;
+    color: #0f172a;
 }
 
 .loader-logo span {
@@ -150,7 +151,7 @@ body {
 
 .timeline-loader {
     height: 4px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.06);
     border-radius: 2px;
     position: relative;
     overflow: visible;
@@ -160,7 +161,7 @@ body {
 .timeline-track {
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(255, 255, 255, 0.08) 19px, rgba(255, 255, 255, 0.08) 20px);
+    background: repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(0, 0, 0, 0.04) 19px, rgba(0, 0, 0, 0.04) 20px);
 }
 
 .timeline-bar {
@@ -245,11 +246,7 @@ body {
 }
 
 .bg-video-overlay {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle, rgba(7, 7, 9, 0.65) 0%, rgba(3, 3, 5, 0.88) 100%);
-    z-index: 1;
-    pointer-events: none;
+    display: none;
 }
 
 .ambient-grid {
@@ -257,18 +254,14 @@ body {
     inset: 0;
     background-size: 40px 40px;
     background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+        linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
     pointer-events: none;
     z-index: 1;
 }
 
 .vignette-overlay {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle, transparent 20%, rgba(3, 3, 5, 0.8) 100%);
-    pointer-events: none;
-    z-index: 2;
+    display: none;
 }
 
 /* Floating Audio Control */
@@ -474,8 +467,8 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.06);
     padding: 0.5rem 1.25rem;
     border-radius: 100px;
     margin-bottom: 2rem;
@@ -549,8 +542,8 @@ body {
 }
 
 .btn-secondary {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     color: var(--color-text);
     padding: 1rem 2rem;
     border-radius: 8px;
@@ -564,7 +557,7 @@ body {
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.06);
     border-color: var(--color-secondary);
     transform: translateY(-3px);
 }
@@ -609,6 +602,7 @@ body {
 .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
+    grid-auto-flow: dense;
     justify-content: center;
     gap: 3rem;
 }
@@ -639,6 +633,16 @@ body {
     aspect-ratio: 9/16;
     overflow: hidden;
     background: #030304;
+}
+
+.project-media.landscape {
+    aspect-ratio: 16/9;
+}
+
+@media (min-width: 769px) {
+    .project-card.landscape-card {
+        grid-column: span 2;
+    }
 }
 
 .project-media img {
@@ -701,7 +705,7 @@ body {
 .project-card:hover {
     transform: translateY(-8px);
     border-color: rgba(139, 92, 246, 0.3);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--border-glow-purple);
+    box-shadow: 0 15px 30px rgba(15, 23, 42, 0.1), 0 0 15px var(--border-glow-purple);
 }
 
 .project-card:hover .project-media img {
@@ -771,9 +775,9 @@ body {
 /* Micro-visual timeline tracks for cards */
 .card-timeline {
     height: 25px;
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(0, 0, 0, 0.02);
     border-radius: 4px;
-    border: 1px dashed rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(0, 0, 0, 0.08);
     display: flex;
     align-items: center;
     padding: 0 0.5rem;
@@ -873,7 +877,7 @@ body {
 .service-card:hover {
     transform: translateY(-8px);
     border-color: rgba(6, 182, 212, 0.3);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 15px var(--border-glow-blue);
+    box-shadow: 0 15px 30px rgba(15, 23, 42, 0.08), 0 0 15px var(--border-glow-blue);
 }
 
 .service-card:hover .service-icon {
@@ -913,7 +917,7 @@ body {
     font-weight: 900;
     line-height: 1;
     margin-bottom: 0.5rem;
-    background: linear-gradient(135deg, #fff 30%, var(--color-text-muted) 100%);
+    background: linear-gradient(135deg, var(--color-text) 30%, var(--color-text-muted) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -982,8 +986,8 @@ body {
     font-size: 1.5rem;
     width: 50px;
     height: 50px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 12px;
     display: flex;
     justify-content: center;
@@ -1019,8 +1023,8 @@ body {
 .social-links a {
     width: 44px;
     height: 44px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -1067,8 +1071,8 @@ body {
 }
 
 .form-group input, .form-group select, .form-group textarea {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 8px;
     padding: 0.9rem 1.2rem;
     color: var(--color-text);
@@ -1081,7 +1085,7 @@ body {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 12px var(--border-glow-purple);
-    background: rgba(255, 255, 255, 0.04);
+    background: #ffffff;
 }
 
 .form-group select {
@@ -1089,7 +1093,7 @@ body {
 }
 
 .form-group select option {
-    background: #0d0d12;
+    background: #ffffff;
     color: var(--color-text);
 }
 
@@ -1187,6 +1191,7 @@ body {
     max-width: 420px;
     z-index: 10001;
     overflow: hidden;
+    transition: max-width 0.4s ease;
 }
 
 .video-wrapper {
@@ -1195,6 +1200,17 @@ body {
     width: 100%;
     height: auto;
     background: #000;
+    transition: aspect-ratio 0.4s ease;
+}
+
+/* Landscape Video Modal adjustments */
+.video-modal.modal-landscape .modal-content {
+    max-width: 960px; /* Wider for landscape */
+    width: 90%;
+}
+
+.video-modal.modal-landscape .video-wrapper {
+    aspect-ratio: 16/9; /* 16:9 aspect ratio */
 }
 
 .video-wrapper video {
@@ -1247,7 +1263,7 @@ body {
         width: 80%;
         max-width: 320px;
         height: 100vh;
-        background: #0b0b0e;
+        background: #ffffff;
         flex-direction: column;
         justify-content: center;
         align-items: center;
