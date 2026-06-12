@@ -365,6 +365,41 @@
             <div class="video-wrapper">
                 <video id="modal-video" controls playsinline src=""></video>
             </div>
+            <!-- Custom HTML5 Video Controls overlay -->
+            <div id="custom-video-controls" class="custom-video-controls hidden">
+                <button class="control-btn play-btn" aria-label="Play/Pause"><i class="fa-solid fa-play"></i></button>
+                <div class="timeline-container">
+                    <input type="range" class="timeline-slider" min="0" max="100" value="0" step="0.1">
+                    <div class="timeline-progress"></div>
+                </div>
+                <span class="time-display">0:00 / 0:00</span>
+                <button class="control-btn volume-btn" aria-label="Mute/Unmute"><i class="fa-solid fa-volume-high"></i></button>
+                
+                <div class="settings-container">
+                    <button class="control-btn settings-btn" aria-label="Settings"><i class="fa-solid fa-gear"></i></button>
+                    <div class="settings-dropdown hidden">
+                        <div class="settings-item mobile-only-setting">
+                            <span>Mute</span>
+                            <button class="control-btn volume-btn-mobile" aria-label="Mute/Unmute"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                        <div class="settings-item">
+                            <span>Speed</span>
+                            <select class="speed-select">
+                                <option value="0.5">0.5x</option>
+                                <option value="1" selected>Normal</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="2">2.0x</option>
+                            </select>
+                        </div>
+                        <div class="settings-item mobile-only-setting">
+                            <span>Fullscreen</span>
+                            <button class="control-btn fullscreen-btn-mobile" aria-label="Fullscreen"><i class="fa-solid fa-expand"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="control-btn fullscreen-btn" aria-label="Fullscreen"><i class="fa-solid fa-expand"></i></button>
+            </div>
         </div>
     </div>
 

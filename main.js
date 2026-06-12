@@ -373,14 +373,182 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoModal = document.getElementById('video-modal');
     const modalClose = document.querySelector('.modal-close');
     const videoWrapper = document.querySelector('.video-wrapper');
+    const customVideoControls = document.getElementById('custom-video-controls');
+
+    let currentVideo = null;
+    let isSeeking = false;
+
+    const setupCustomControls = (video) => {
+        currentVideo = video;
+        const playBtn = customVideoControls.querySelector('.play-btn');
+        const timelineSlider = customVideoControls.querySelector('.timeline-slider');
+        const timelineProgress = customVideoControls.querySelector('.timeline-progress');
+        const timeDisplay = customVideoControls.querySelector('.time-display');
+        const volumeBtn = customVideoControls.querySelector('.volume-btn');
+        const volumeBtnMobile = customVideoControls.querySelector('.volume-btn-mobile');
+        const settingsBtn = customVideoControls.querySelector('.settings-btn');
+        const settingsDropdown = customVideoControls.querySelector('.settings-dropdown');
+        const speedSelect = customVideoControls.querySelector('.speed-select');
+        const fullscreenBtn = customVideoControls.querySelector('.fullscreen-btn');
+        const fullscreenBtnMobile = customVideoControls.querySelector('.fullscreen-btn-mobile');
+
+        // Reset elements state
+        if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        if (timelineSlider) timelineSlider.value = 0;
+        if (timelineProgress) timelineProgress.style.width = '0%';
+        if (timeDisplay) timeDisplay.textContent = '0:00 / 0:00';
+        if (speedSelect) speedSelect.value = '1';
+        if (settingsDropdown) settingsDropdown.classList.add('hidden');
+        if (volumeBtn) volumeBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+        if (volumeBtnMobile) volumeBtnMobile.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+
+        // Helper: format time in MM:SS
+        const formatTime = (seconds) => {
+            if (isNaN(seconds) || seconds === Infinity) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        };
+
+        // Play/Pause event
+        const togglePlay = () => {
+            if (video.paused) {
+                video.play().catch(e => console.log("Play failed:", e));
+            } else {
+                video.pause();
+            }
+        };
+
+        playBtn.onclick = (e) => {
+            e.stopPropagation();
+            togglePlay();
+        };
+        video.onclick = togglePlay;
+
+        video.onplay = () => {
+            playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        };
+
+        video.onpause = () => {
+            playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        };
+
+        // Time updates
+        video.ontimeupdate = () => {
+            if (isSeeking) return;
+            const pct = (video.currentTime / video.duration) * 100;
+            timelineSlider.value = pct || 0;
+            timelineProgress.style.width = `${pct || 0}%`;
+            timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+        };
+
+        video.onloadedmetadata = () => {
+            timeDisplay.textContent = `0:00 / ${formatTime(video.duration)}`;
+        };
+
+        // Seeking events
+        timelineSlider.oninput = () => {
+            isSeeking = true;
+            timelineProgress.style.width = `${timelineSlider.value}%`;
+            if (video.duration) {
+                const targetTime = (timelineSlider.value / 100) * video.duration;
+                timeDisplay.textContent = `${formatTime(targetTime)} / ${formatTime(video.duration)}`;
+            }
+        };
+
+        timelineSlider.onchange = () => {
+            isSeeking = false;
+            if (video.duration) {
+                video.currentTime = (timelineSlider.value / 100) * video.duration;
+            }
+        };
+
+        // Sync volume change
+        video.onvolumechange = () => {
+            if (video.muted) {
+                if (volumeBtn) volumeBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+                if (volumeBtnMobile) volumeBtnMobile.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+            } else {
+                if (volumeBtn) volumeBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+                if (volumeBtnMobile) volumeBtnMobile.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+            }
+        };
+
+        // Volume / Mute
+        const toggleMute = () => {
+            video.muted = !video.muted;
+        };
+
+        if (volumeBtn) {
+            volumeBtn.onclick = (e) => {
+                e.stopPropagation();
+                toggleMute();
+            };
+        }
+        if (volumeBtnMobile) {
+            volumeBtnMobile.onclick = (e) => {
+                e.stopPropagation();
+                toggleMute();
+            };
+        }
+
+        // Settings gears toggle
+        settingsBtn.onclick = (e) => {
+            e.stopPropagation();
+            settingsDropdown.classList.toggle('hidden');
+        };
+
+        // Speed change option
+        speedSelect.onchange = () => {
+            video.playbackRate = parseFloat(speedSelect.value);
+            settingsDropdown.classList.add('hidden'); // auto-close on selection
+        };
+
+        // Fullscreen
+        const triggerFullscreen = () => {
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
+            } else if (video.webkitRequestFullscreen) {
+                video.webkitRequestFullscreen(); // Safari
+            } else if (video.msRequestFullscreen) {
+                video.msRequestFullscreen(); // IE11
+            }
+        };
+
+        if (fullscreenBtn) {
+            fullscreenBtn.onclick = (e) => {
+                e.stopPropagation();
+                triggerFullscreen();
+            };
+        }
+        if (fullscreenBtnMobile) {
+            fullscreenBtnMobile.onclick = (e) => {
+                e.stopPropagation();
+                triggerFullscreen();
+            };
+        }
+    };
+
+    // Close settings dropdown when clicking outside
+    window.addEventListener('click', (e) => {
+        const settingsDropdown = customVideoControls ? customVideoControls.querySelector('.settings-dropdown') : null;
+        const settingsBtn = customVideoControls ? customVideoControls.querySelector('.settings-btn') : null;
+        if (settingsDropdown && settingsBtn && !settingsBtn.contains(e.target) && !settingsDropdown.contains(e.target)) {
+            settingsDropdown.classList.add('hidden');
+        }
+    });
 
     projectCards.forEach(card => {
         card.addEventListener('click', () => {
             const videoUrl = card.getAttribute('data-video');
             const isLandscape = card.getAttribute('data-aspect') === '16-9' || card.classList.contains('landscape-card');
             if (videoWrapper && videoUrl) {
-                if (videoUrl.includes('drive.google.com')) {
-                    // Convert download/view links to preview URLs so they embed and stream nicely
+                const isDrive = videoUrl.includes('drive.google.com');
+
+                if (isDrive) {
+                    // Hide custom controls overlay for iframe embeds
+                    if (customVideoControls) customVideoControls.classList.add('hidden');
+
                     let embedUrl = videoUrl;
                     if (videoUrl.includes('uc?export=download&id=')) {
                         const id = videoUrl.split('id=')[1].split('&')[0];
@@ -389,14 +557,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         embedUrl = videoUrl.replace(/\/view.*/, '/preview');
                     }
                     
-                    // CSS handles sizing via flex layout; explicit style ensures mobile compat
                     videoWrapper.innerHTML = `<iframe id="modal-iframe" src="${embedUrl}" style="width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                 } else {
-                    videoWrapper.innerHTML = `<video id="modal-video" controls playsinline src="${encodeURI(decodeURI(videoUrl))}"></video>`;
+                    // Show custom controls overlay for direct video elements
+                    if (customVideoControls) customVideoControls.classList.remove('hidden');
+
+                    videoWrapper.innerHTML = `<video id="modal-video" playsinline src="${encodeURI(decodeURI(videoUrl))}"></video>`;
                     const modalVideo = document.getElementById('modal-video');
                     if (modalVideo) {
                         modalVideo.load();
                         modalVideo.play().catch(e => console.log("Modal play blocked:", e));
+                        
+                        setupCustomControls(modalVideo);
                     }
                 }
 
@@ -407,7 +579,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 videoModal.classList.remove('hidden');
-                // Lock scroll on BOTH html and body — critical for iOS Safari to prevent zoom
                 document.documentElement.classList.add('modal-open');
                 document.body.classList.add('modal-open');
             }
@@ -418,9 +589,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (videoWrapper) {
             videoWrapper.innerHTML = ''; // Clear video/iframe resources completely
         }
+        if (customVideoControls) {
+            customVideoControls.classList.add('hidden');
+        }
+        currentVideo = null;
         videoModal.classList.add('hidden');
         videoModal.classList.remove('modal-landscape');
-        // Restore scroll on both html and body
         document.documentElement.classList.remove('modal-open');
         document.body.classList.remove('modal-open');
     };
