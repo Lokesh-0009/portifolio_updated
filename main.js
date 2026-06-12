@@ -202,42 +202,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
     revealElements.forEach(el => revealObserver.observe(el));
 
-    // Scroll-based header behavior: show on scroll up, hide on scroll down, glass effect on scroll
-    let lastScrollY = 0;
-    let headerHidden = false;
-    const scrollThreshold = 5; // Dead zone to prevent jitter
+    // Scroll-based header behavior:
+    // - Always visible on hero section
+    // - On other sections: show on scroll, auto-hide after 5s of no movement
+    let hideTimer = null;
+    const HIDE_DELAY = 5000; // 5 seconds
+    const heroSection = document.getElementById('hero');
+
+    const showHeader = () => {
+        const header = document.getElementById('main-header');
+        if (header) header.classList.remove('header-hidden');
+    };
+
+    const hideHeader = () => {
+        const header = document.getElementById('main-header');
+        if (header) header.classList.add('header-hidden');
+    };
+
+    const resetHideTimer = () => {
+        if (hideTimer) clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => {
+            // Only auto-hide if we're past the hero section
+            const heroBottom = heroSection ? heroSection.offsetTop + heroSection.offsetHeight : 0;
+            if (window.scrollY > heroBottom - 100) {
+                hideHeader();
+            }
+        }, HIDE_DELAY);
+    };
 
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
         const header = document.getElementById('main-header');
         if (!header) return;
 
-        // Add 'scrolled' class for enhanced glass effect when past hero
+        // Add 'scrolled' class for enhanced glass effect when past top
         if (currentScrollY > 50) {
             header.classList.add('scrolled');
         } else {
             header.classList.remove('scrolled');
         }
 
-        // Show/hide based on scroll direction
-        if (Math.abs(currentScrollY - lastScrollY) < scrollThreshold) return;
+        // Determine if we're in the hero section
+        const heroBottom = heroSection ? heroSection.offsetTop + heroSection.offsetHeight : 0;
+        const isInHero = currentScrollY < heroBottom - 100;
 
-        if (currentScrollY > lastScrollY && currentScrollY > 100) {
-            // Scrolling DOWN — hide header
-            if (!headerHidden) {
-                header.classList.add('header-hidden');
-                headerHidden = true;
-            }
+        if (isInHero) {
+            // Hero section — always show, cancel any hide timer
+            showHeader();
+            if (hideTimer) clearTimeout(hideTimer);
         } else {
-            // Scrolling UP — show header
-            if (headerHidden) {
-                header.classList.remove('header-hidden');
-                headerHidden = false;
-            }
+            // Past hero — show on any scroll, start 5s hide timer
+            showHeader();
+            resetHideTimer();
         }
-
-        lastScrollY = currentScrollY;
     }, { passive: true });
+
+    // Also show header on mouse/touch movement (for when user stops scrolling but moves mouse)
+    const onUserActivity = () => {
+        const heroBottom = heroSection ? heroSection.offsetTop + heroSection.offsetHeight : 0;
+        if (window.scrollY >= heroBottom - 100) {
+            showHeader();
+            resetHideTimer();
+        }
+    };
+    window.addEventListener('mousemove', onUserActivity, { passive: true });
+    window.addEventListener('touchstart', onUserActivity, { passive: true });
 
     // Mobile Menu Toggle
     mobileMenuToggle.addEventListener('click', () => {
