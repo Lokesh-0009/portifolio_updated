@@ -198,6 +198,16 @@ document.addEventListener('DOMContentLoaded', () => {
         navMenu.classList.toggle('open');
     });
 
+    // Close mobile menu when tapping the backdrop overlay (::before pseudo-element)
+    navMenu.addEventListener('click', (e) => {
+        // The ::before backdrop captures clicks and they bubble to navMenu
+        // Only close if the click is directly on the navMenu (not its children/links)
+        if (e.target === navMenu) {
+            mobileMenuToggle.classList.remove('open');
+            navMenu.classList.remove('open');
+        }
+    });
+
     // Close mobile menu when nav link is clicked
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
