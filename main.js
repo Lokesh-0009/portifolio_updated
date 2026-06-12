@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     videoWrapper.innerHTML = `<iframe id="modal-iframe" src="${embedUrl}" style="width: 100%; height: 100%; border: none; border-radius: 12px;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                 } else {
-                    videoWrapper.innerHTML = `<video id="modal-video" controls playsinline style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px; display: block;" src="${encodeURI(videoUrl)}"></video>`;
+                    videoWrapper.innerHTML = `<video id="modal-video" controls playsinline style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px; display: block;" src="${encodeURI(decodeURI(videoUrl))}"></video>`;
                     const modalVideo = document.getElementById('modal-video');
                     if (modalVideo) {
                         modalVideo.load();
