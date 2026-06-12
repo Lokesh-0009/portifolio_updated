@@ -284,16 +284,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Close mobile menu when nav link is clicked
+    // Close mobile menu and update active on nav link click
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
             mobileMenuToggle.classList.remove('open');
             navMenu.classList.remove('open');
-            
+
             // Active class tracking
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             link.classList.add('active');
         });
+    });
+
+    // Auto-update active nav link based on scroll position
+    const sections = [
+        { id: 'hero',     selector: '[href="#hero"]' },
+        { id: 'work',     selector: '[href="#work"]' },
+        { id: 'services', selector: '[href="#services"]' },
+        { id: 'contact',  selector: '[href="#contact"]' },
+    ];
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                const match = sections.find(s => s.id === id);
+                if (match) {
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    const activeLink = document.querySelector(`.nav-link${match.selector}`);
+                    if (activeLink) activeLink.classList.add('active');
+                }
+            }
+        });
+    }, { threshold: 0.3 });
+
+    sections.forEach(s => {
+        const el = document.getElementById(s.id);
+        if (el) sectionObserver.observe(el);
     });
 
     // 4. PORTFOLIO FILTER MECHANISM (Simplified - no categories)
