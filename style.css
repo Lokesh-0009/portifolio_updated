@@ -33,11 +33,15 @@
     scroll-behavior: smooth;
 }
 
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
 body {
     background-color: var(--bg-dark);
     color: var(--color-text);
     font-family: var(--font-body);
-    overflow-x: hidden;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
 }
@@ -740,7 +744,7 @@ body {
 
 .btn-primary {
     background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-    border: none;
+    border: 1px solid transparent;
     color: #fff;
     padding: 1rem 2rem;
     border-radius: 8px;
@@ -1398,8 +1402,6 @@ body.modal-open {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    /* Prevent any child from causing layout shift */
-    contain: strict;
 }
 
 .modal-close {
@@ -1444,6 +1446,9 @@ body.modal-open {
     /* Ensure it stays centered and never goes outside viewport */
     position: relative;
     margin: 0;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: #000;
 }
 
 .video-wrapper {
@@ -1468,16 +1473,24 @@ body.modal-open {
 
 .video-wrapper video {
     width: 100%;
-    height: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: 9/16;
     object-fit: contain;
+    margin: auto;
+    display: block;
     border: none;
     border-radius: 12px;
-    display: block;
+}
+
+.video-modal.modal-landscape .video-wrapper video {
+    aspect-ratio: 16/9;
 }
 
 .video-wrapper iframe {
     width: 100%;
-    flex: 1;
+    height: 100%;
     border: none;
     border-radius: 12px;
     display: block;
@@ -1529,6 +1542,12 @@ body.modal-open {
 }
 
 @media (max-width: 768px) {
+    body.menu-open {
+        overflow: hidden !important;
+    }
+    .container {
+        padding: 0 1.5rem;
+    }
     .main-header {
         padding: 1rem 1.5rem;
     }
@@ -1546,7 +1565,7 @@ body.modal-open {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 3rem;
+        gap: 2.5rem;
         transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s;
         border-left: 1px solid var(--border-color);
         z-index: 1005;
@@ -1559,15 +1578,23 @@ body.modal-open {
         visibility: visible;
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
     }
-    /* Dark backdrop overlay when mobile menu is open */
+    .nav-menu .nav-link {
+        font-size: 1.25rem;
+        padding: 0.8rem 2rem;
+        width: 100%;
+        text-align: center;
+    }
+    /* Dark backdrop overlay when mobile menu is open - positioned to the left to prevent horizontal scroll */
     .nav-menu::before {
         content: '';
-        position: fixed;
+        position: absolute;
         top: 0;
-        left: 0;
+        right: 100%;
         width: 100vw;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.4);
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.4s ease, visibility 0.4s;
@@ -1594,11 +1621,30 @@ body.modal-open {
     .header-cta {
         display: none;
     }
+    .hero-text-side {
+        align-items: center;
+        text-align: center;
+    }
+    .hero-greeting {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+        width: 100%;
+    }
+    .tagline-badge {
+        margin-left: auto;
+        margin-right: auto;
+    }
     .hero-title {
-        font-size: 3rem;
+        font-size: 2.75rem;
+        text-align: center;
+        width: 100%;
     }
     .hero-subtitle {
         font-size: 1.1rem;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
     }
     .hero-actions {
         flex-direction: column;
@@ -1610,8 +1656,63 @@ body.modal-open {
         width: 100%;
         justify-content: center;
     }
+    .hero-image-wrapper {
+        max-width: 320px;
+        margin: 0 auto;
+    }
+    .profile-socials-pill {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        margin-top: 1.5rem;
+        margin-left: auto;
+        margin-right: auto;
+        width: fit-content;
+    }
+    .portfolio-grid {
+        justify-content: center;
+    }
+    .project-card {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 320px;
+    }
+    .service-card {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .card-timeline {
+        justify-content: center;
+        width: 100%;
+        max-width: 240px;
+    }
+    .contact-info {
+        align-items: center;
+        text-align: center;
+    }
+    .contact-details {
+        align-items: center;
+        width: 100%;
+    }
+    .contact-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    .social-links {
+        justify-content: center;
+    }
     .form-row {
         grid-template-columns: 1fr;
+    }
+    .btn-submit {
+        align-self: center;
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
     }
     .footer-content {
         flex-direction: column;
@@ -1640,6 +1741,9 @@ body.modal-open {
         /* Height based on 9:16 ratio from width, capped at viewport */
         height: min(calc(92vw * 16 / 9), 85vh, 85dvh);
         max-height: 85vh;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: #000;
     }
     .video-modal.modal-landscape .modal-content {
         width: 96vw;
@@ -1707,6 +1811,9 @@ body.modal-open {
         max-width: 96vw;
         height: min(calc(96vw * 16 / 9), 82vh, 82dvh);
         max-height: 82vh;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: #000;
     }
     .video-modal.modal-landscape .modal-content {
         width: 98vw;

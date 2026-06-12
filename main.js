@@ -272,6 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileMenuToggle.addEventListener('click', () => {
         mobileMenuToggle.classList.toggle('open');
         navMenu.classList.toggle('open');
+        document.body.classList.toggle('menu-open');
     });
 
     // Close mobile menu when tapping the backdrop overlay (::before pseudo-element)
@@ -281,6 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === navMenu) {
             mobileMenuToggle.classList.remove('open');
             navMenu.classList.remove('open');
+            document.body.classList.remove('menu-open');
         }
     });
 
@@ -289,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', () => {
             mobileMenuToggle.classList.remove('open');
             navMenu.classList.remove('open');
+            document.body.classList.remove('menu-open');
 
             // Active class tracking
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
