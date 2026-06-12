@@ -1768,6 +1768,19 @@ body.modal-open {
         height: 38px;
         font-size: 1.2rem;
     }
+    .video-wrapper video {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        object-fit: contain !important;
+        aspect-ratio: unset !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        margin: 0 !important;
+        transform: none !important;
+    }
 }
 
 /* Small mobile devices (max-width: 480px) */
