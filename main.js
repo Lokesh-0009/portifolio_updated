@@ -253,19 +253,35 @@ document.addEventListener('DOMContentLoaded', () => {
         statsObserver.observe(statsSection);
     }
 
-    // 6. PORTFOLIO CLICK DETAILS (LOCAL MP4 VIDEO PLAYER MODAL)
+    // 6. PORTFOLIO CLICK DETAILS (DYNAMIC VIDEO / IFRAME PLAYER MODAL)
     const videoModal = document.getElementById('video-modal');
-    const modalVideo = document.getElementById('modal-video');
     const modalClose = document.querySelector('.modal-close');
+    const videoWrapper = document.querySelector('.video-wrapper');
 
     projectCards.forEach(card => {
         card.addEventListener('click', () => {
             const videoUrl = card.getAttribute('data-video');
             const isLandscape = card.getAttribute('data-aspect') === '16-9' || card.classList.contains('landscape-card');
-            if (modalVideo && videoUrl) {
-                // Encode the URL to properly handle spaces or special characters in filenames
-                modalVideo.setAttribute('src', encodeURI(videoUrl));
-                modalVideo.load(); // Force browser to load the new video source
+            if (videoWrapper && videoUrl) {
+                if (videoUrl.includes('drive.google.com')) {
+                    // Convert download/view links to preview URLs so they embed and stream nicely
+                    let embedUrl = videoUrl;
+                    if (videoUrl.includes('uc?export=download&id=')) {
+                        const id = videoUrl.split('id=')[1].split('&')[0];
+                        embedUrl = `https://drive.google.com/file/d/${id}/preview`;
+                    } else if (videoUrl.includes('/file/d/') && !videoUrl.includes('/preview')) {
+                        embedUrl = videoUrl.replace(/\/view.*/, '/preview');
+                    }
+                    
+                    videoWrapper.innerHTML = `<iframe id="modal-iframe" src="${embedUrl}" style="width: 100%; height: 100%; border: none; border-radius: 12px;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                } else {
+                    videoWrapper.innerHTML = `<video id="modal-video" controls playsinline style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px; display: block;" src="${encodeURI(videoUrl)}"></video>`;
+                    const modalVideo = document.getElementById('modal-video');
+                    if (modalVideo) {
+                        modalVideo.load();
+                        modalVideo.play().catch(e => console.log("Modal play blocked:", e));
+                    }
+                }
                 
                 if (isLandscape) {
                     videoModal.classList.add('modal-landscape');
@@ -275,16 +291,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 videoModal.classList.remove('hidden');
                 document.body.style.overflow = 'hidden'; // Lock page scroll
-                modalVideo.play().catch(e => console.log("Modal play blocked:", e));
             }
         });
     });
 
     const closeModal = () => {
-        if (modalVideo) {
-            modalVideo.pause();
-            modalVideo.removeAttribute('src'); // Clear video src attribute
-            modalVideo.load(); // Force release of video resources
+        if (videoWrapper) {
+            videoWrapper.innerHTML = ''; // Clear video/iframe resources completely
         }
         videoModal.classList.add('hidden');
         videoModal.classList.remove('modal-landscape'); // Reset state
