@@ -565,7 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ==========================================================================
-    // 9. DYNAMIC ANTI-GRAVITY PARTICLE CANVAS BACKGROUND
+    // 9. DYNAMIC GLASSMORPHISM ANTI-GRAVITY PARTICLE BACKDROP (Perplexity Style)
     // ==========================================================================
     const particleCanvas = document.getElementById('particles-canvas');
     if (particleCanvas) {
@@ -575,31 +575,84 @@ document.addEventListener('DOMContentLoaded', () => {
         let width = 0;
         let height = 0;
         const dpr = window.devicePixelRatio || 1;
+        let lastTime = 0;
+        let draggedParticle = null;
 
-        // Track mouse position globally
+        // Track mouse coordinates globally
         const mouse = {
             x: null,
             y: null,
-            radius: 120 // repulsion distance threshold
+            radius: 140 // magnetic hover attraction/repulsion radius
         };
 
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
+        const onMouseDown = (e) => {
+            const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+            if (clientX === undefined || clientY === undefined) return;
+
+            // Check if user clicked on an interactive HTML node to prevent blocking normal clicks
+            const target = e.target;
+            const isInteractive = target.closest('a, button, input, select, textarea, [role="button"], .project-card, .mobile-menu-toggle, .btn-primary, .btn-secondary, .social-links a, .nav-link, .profile-socials-pill a, .contact-item a');
+            if (isInteractive) return;
+
+            // Search for closest particle intersection
+            let closestParticle = null;
+            let minDist = Infinity;
+            
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                const dist = Math.hypot(p.x - clientX, p.y - clientY);
+                // Size-based selection limit + touch padding (15px)
+                if (dist < p.size + 15 && dist < minDist) {
+                    minDist = dist;
+                    closestParticle = p;
+                }
+            }
+
+            if (closestParticle) {
+                draggedParticle = closestParticle;
+                draggedParticle.isDragging = true;
+                draggedParticle.dragAlpha = 0.0; // disable anti-gravity
+                mouse.x = clientX;
+                mouse.y = clientY;
+                if (e.cancelable) e.preventDefault();
+            }
+        };
+
+        const onMouseMove = (e) => {
+            const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+            if (clientX === undefined || clientY === undefined) return;
+
+            mouse.x = clientX;
+            mouse.y = clientY;
+        };
+
+        const onMouseUp = () => {
+            if (draggedParticle) {
+                draggedParticle.isDragging = false;
+                draggedParticle = null;
+            }
+        };
+
+        // Attach global events to window
+        window.addEventListener('mousedown', onMouseDown, { passive: false });
+        window.addEventListener('mousemove', onMouseMove, { passive: true });
+        window.addEventListener('mouseup', onMouseUp, { passive: true });
+
+        window.addEventListener('touchstart', onMouseDown, { passive: false });
+        window.addEventListener('touchmove', onMouseMove, { passive: true });
+        window.addEventListener('touchend', onMouseUp, { passive: true });
+        window.addEventListener('touchcancel', onMouseUp, { passive: true });
 
         window.addEventListener('mouseleave', () => {
             mouse.x = null;
             mouse.y = null;
+            if (draggedParticle) {
+                draggedParticle.isDragging = false;
+                draggedParticle = null;
+            }
         });
-
-        // Theme colors with alpha channels (purple, cyan, soft grey)
-        // Adjust values for high premium contrast on a clean white page
-        const particleColors = [
-            'rgba(109, 40, 217, 0.12)', // Deep Purple
-            'rgba(8, 145, 178, 0.12)',  // Cyber Cyan
-            'rgba(15, 23, 42, 0.06)'   // Slate Dark Grey
-        ];
 
         class Particle {
             constructor() {
@@ -608,75 +661,191 @@ document.addEventListener('DOMContentLoaded', () => {
 
             reset(initial = false) {
                 this.x = Math.random() * width;
-                // Start below or at random height if initial run
-                this.y = initial ? Math.random() * height : height + 10;
-                this.size = Math.random() * 2.5 + 0.8; // size 0.8px to 3.3px
+                this.y = initial ? Math.random() * height : height + 60;
                 
-                // Drift base speed (drift horizontally slowly)
-                this.vx = Math.random() * 0.3 - 0.15;
-                // Base anti-gravity rising velocity (float upward)
-                this.vy = -(Math.random() * 0.4 + 0.25);
+                // size distribution: 85% small/mid, 15% larger glass orbs
+                const r = Math.random();
+                if (r < 0.85) {
+                    this.size = Math.random() * 12 + 4; // 4px to 16px
+                } else if (r < 0.97) {
+                    this.size = Math.random() * 15 + 16; // 16px to 31px
+                } else {
+                    this.size = Math.random() * 29 + 31; // 31px to 60px
+                }
                 
-                // Randomly choose colors
-                this.color = particleColors[Math.floor(Math.random() * particleColors.length)];
+                // Mass proportional to area/size to drive inertia
+                this.mass = (this.size * this.size * 0.05) + 1;
                 
-                // Base opacity for drifting back
-                this.alpha = Math.random() * 0.5 + 0.3;
+                // Base anti-gravity speed (smaller float faster, larger float slower)
+                this.baseVy = - (1.4 / Math.sqrt(this.size)) - 0.15;
                 
-                // Track current velocity offsets for mouse reactivity
-                this.offsetX = 0;
-                this.offsetY = 0;
+                this.vx = Math.random() * 0.2 - 0.1;
+                this.vy = this.baseVy;
+                
+                // Dynamic colors matching portfolio palette
+                const randColor = Math.random();
+                if (randColor < 0.45) {
+                    this.colorType = 'purple';
+                } else if (randColor < 0.90) {
+                    this.colorType = 'cyan';
+                } else {
+                    this.colorType = 'white';
+                }
+                
+                this.noisePhase = Math.random() * 100;
+                this.glow = 0.0;
+                this.isDragging = false;
+                this.dragAlpha = 1.0; // anti-gravity scale (1.0 = full float, 0.0 = none)
             }
 
-            update() {
-                // Apply a tiny floating noise to drift velocity
-                this.vx += (Math.random() * 0.04 - 0.02);
-                // Clamp horizontal base velocity
-                this.vx = Math.max(-0.25, Math.min(0.25, this.vx));
-
-                // Mouse interaction / Repulsion
-                if (mouse.x !== null && mouse.y !== null) {
-                    const dx = this.x - mouse.x;
-                    const dy = this.y - mouse.y;
-                    const distance = Math.hypot(dx, dy);
-
-                    if (distance < mouse.radius) {
-                        // Calculate force vector away from mouse
-                        const force = (mouse.radius - distance) / mouse.radius;
-                        const angle = Math.atan2(dy, dx);
-                        
-                        // Push velocity
-                        const pushX = Math.cos(angle) * force * 1.8;
-                        const pushY = Math.sin(angle) * force * 1.8;
-                        
-                        // Apply push offsets
-                        this.offsetX += (pushX - this.offsetX) * 0.1;
-                        this.offsetY += (pushY - this.offsetY) * 0.1;
-                    } else {
-                        // Return slowly to zero offset
-                        this.offsetX *= 0.95;
-                        this.offsetY *= 0.95;
-                    }
+            update(time) {
+                if (this.isDragging) {
+                    // Spring pull towards cursor position
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    this.vx += (dx * 0.15) / this.mass;
+                    this.vy += (dy * 0.15) / this.mass;
+                    // Strong friction during drag to prevent jittering
+                    this.vx *= 0.82;
+                    this.vy *= 0.82;
+                    this.glow = Math.min(1.0, this.glow + 0.1);
                 } else {
-                    this.offsetX *= 0.95;
-                    this.offsetY *= 0.95;
+                    // Gradually restore anti-gravity weight on drag release
+                    if (this.dragAlpha < 1.0) {
+                        this.dragAlpha += 0.02;
+                    }
+
+                    // Perlin-like wave drift horizontal velocity
+                    const targetVx = Math.sin(this.y * 0.005 + time * 0.0012 + this.noisePhase) * 0.35;
+                    this.vx += (targetVx - this.vx) * 0.03;
+
+                    // Buoyancy drift vertical velocity
+                    const targetVy = (this.baseVy + Math.cos(this.x * 0.003 + time * 0.001 + this.noisePhase) * 0.15) * this.dragAlpha;
+                    this.vy += (targetVy - this.vy) * 0.03;
+
+                    // Proximity interaction field
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const dx = this.x - mouse.x;
+                        const dy = this.y - mouse.y;
+                        const dist = Math.hypot(dx, dy);
+
+                        if (dist < mouse.radius) {
+                            const force = (mouse.radius - dist) / mouse.radius;
+                            const angle = Math.atan2(dy, dx);
+
+                            // Push away softly from magnetic cursor
+                            this.vx += (Math.cos(angle) * force * 0.8) / this.mass;
+                            this.vy += (Math.sin(angle) * force * 0.8) / this.mass;
+                            
+                            // Elevate light glow intensity
+                            this.glow = Math.min(1.0, this.glow + 0.06);
+                        } else {
+                            this.glow = Math.max(0.0, this.glow - 0.02);
+                        }
+                    } else {
+                        this.glow = Math.max(0.0, this.glow - 0.02);
+                    }
+
+                    // Apply normal movement damping
+                    this.vx *= 0.98;
+                    this.vy *= 0.98;
                 }
 
-                // Add base velocity + mouse repulsion offset
-                this.x += this.vx + this.offsetX;
-                this.y += this.vy + this.offsetY;
+                // Apply updates
+                this.x += this.vx;
+                this.y += this.vy;
 
-                // Reset particle if it drifts off top or sides
-                if (this.y < -10 || this.x < -10 || this.x > width + 10) {
+                // Screen boundary collision checks (soft bounce)
+                const bounce = -0.45;
+                if (this.x < this.size) {
+                    this.x = this.size;
+                    this.vx *= bounce;
+                } else if (this.x > width - this.size) {
+                    this.x = width - this.size;
+                    this.vx *= bounce;
+                }
+
+                // If float out top of viewport, recycle to bottom
+                if (this.y < -this.size - 10) {
                     this.reset(false);
                 }
             }
 
             draw() {
+                ctx.save();
+                
+                const currentSize = this.size * (this.isDragging ? 1.08 : (1.0 + this.glow * 0.05));
+                
+                // 1. Ambient Blur Glow / Drop Shadow
+                const glowRadius = currentSize * 2.2;
+                const glowGrad = ctx.createRadialGradient(this.x, this.y, currentSize * 0.5, this.x, this.y, glowRadius);
+                
+                let glowColor = 'rgba(109, 40, 217, 0.015)'; // Purple default
+                if (this.colorType === 'cyan') {
+                    glowColor = 'rgba(8, 145, 178, 0.015)';
+                } else if (this.colorType === 'white') {
+                    glowColor = 'rgba(255, 255, 255, 0.03)';
+                }
+                
+                const baseGlowAlpha = this.isDragging ? 0.25 : (0.04 + this.glow * 0.12);
+                const targetGlowColor = glowColor.replace(/[\d.]+\)$/, `${baseGlowAlpha})`);
+                
+                glowGrad.addColorStop(0, targetGlowColor);
+                glowGrad.addColorStop(0.5, targetGlowColor.replace(/[\d.]+\)$/, `${baseGlowAlpha * 0.4})`));
+                glowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                
+                ctx.fillStyle = glowGrad;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
+                ctx.arc(this.x, this.y, glowRadius, 0, Math.PI * 2);
                 ctx.fill();
+                
+                // 2. Glass Base fill (specular radial lighting gradient)
+                const specularX = this.x - currentSize * 0.22;
+                const specularY = this.y - currentSize * 0.22;
+                const fillGrad = ctx.createRadialGradient(specularX, specularY, currentSize * 0.05, this.x, this.y, currentSize);
+                
+                if (this.colorType === 'purple') {
+                    fillGrad.addColorStop(0, 'rgba(196, 181, 253, 0.22)');
+                    fillGrad.addColorStop(0.5, 'rgba(139, 92, 246, 0.09)');
+                    fillGrad.addColorStop(1, 'rgba(109, 40, 217, 0.04)');
+                } else if (this.colorType === 'cyan') {
+                    fillGrad.addColorStop(0, 'rgba(207, 250, 254, 0.22)');
+                    fillGrad.addColorStop(0.5, 'rgba(6, 182, 212, 0.09)');
+                    fillGrad.addColorStop(1, 'rgba(8, 145, 178, 0.04)');
+                } else {
+                    fillGrad.addColorStop(0, 'rgba(255, 255, 255, 0.35)');
+                    fillGrad.addColorStop(0.5, 'rgba(241, 245, 249, 0.10)');
+                    fillGrad.addColorStop(1, 'rgba(203, 213, 225, 0.05)');
+                }
+                
+                ctx.fillStyle = fillGrad;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, currentSize, 0, Math.PI * 2);
+                ctx.fill();
+
+                // 3. Specular Highlights (Reflection Curve & Dot)
+                if (currentSize > 6) {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, currentSize * 0.85, Math.PI * 1.05, Math.PI * 1.55);
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${0.30 + this.glow * 0.2})`;
+                    ctx.lineWidth = currentSize * 0.06;
+                    ctx.stroke();
+                    
+                    ctx.beginPath();
+                    ctx.ellipse(specularX, specularY, currentSize * 0.12, currentSize * 0.08, Math.PI / 4, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${0.40 + this.glow * 0.25})`;
+                    ctx.fill();
+                }
+
+                // 4. White Glass Rim Outline (Refraction Edge)
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, currentSize, 0, Math.PI * 2);
+                const strokeAlpha = 0.07 + this.glow * 0.15 + (this.isDragging ? 0.25 : 0.0);
+                ctx.strokeStyle = `rgba(255, 255, 255, ${strokeAlpha})`;
+                ctx.lineWidth = currentSize > 15 ? 1.0 : 0.6;
+                ctx.stroke();
+                
+                ctx.restore();
             }
         }
 
@@ -684,15 +853,14 @@ document.addEventListener('DOMContentLoaded', () => {
             width = window.innerWidth;
             height = window.innerHeight;
             
-            // Set dimensions on element scaled by DPR to prevent blurry particles
             particleCanvas.width = width * dpr;
             particleCanvas.height = height * dpr;
             ctx.scale(dpr, dpr);
             
-            // Re-populate particles based on screens size (approx. 1 particle per 15000px^2)
-            const count = Math.min(Math.floor((width * height) / 15000), 100);
+            // Scaled adaptive density count based on screen width
+            // ~40 on mobile up to ~180 on wide screens
+            const count = Math.min(Math.floor((width * height) / 9500), 220);
             
-            // Maintain existing particle positions on resize, only adjust count
             if (particles.length < count) {
                 const diff = count - particles.length;
                 for (let i = 0; i < diff; i++) {
@@ -706,24 +874,72 @@ document.addEventListener('DOMContentLoaded', () => {
         const initParticles = () => {
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
-            
-            // Start main loop
-            animate();
+            animate(0);
         };
 
-        const animate = () => {
+        const animate = (timestamp) => {
             ctx.clearRect(0, 0, width, height);
             
-            // Update and draw each particle
+            const time = timestamp || 0;
+
+            // 1. Double loop to handle Soft Collisions and Clustering Forces
             for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
+                const p1 = particles[i];
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p2.x - p1.x;
+                    const dy = p2.y - p1.y;
+                    
+                    // Quick boundary reject check before expensive math
+                    if (Math.abs(dx) > 180 || Math.abs(dy) > 180) continue;
+                    
+                    const dist = Math.hypot(dx, dy);
+                    const minDist = p1.size + p2.size;
+
+                    // Soft collisions push-back
+                    if (dist < minDist) {
+                        const overlap = minDist - dist;
+                        const angle = Math.atan2(dy, dx);
+                        const force = overlap * 0.08;
+                        
+                        p1.vx -= (Math.cos(angle) * force) / p1.mass;
+                        p1.vy -= (Math.sin(angle) * force) / p1.mass;
+                        p2.vx += (Math.cos(angle) * force) / p2.mass;
+                        p2.vy += (Math.sin(angle) * force) / p2.mass;
+                    } 
+                    // Clustering attraction forces
+                    else if (dist < 180) {
+                        const force = (180 - dist) * 0.0001;
+                        const angle = Math.atan2(dy, dx);
+                        
+                        p1.vx += (Math.cos(angle) * force) / p1.mass;
+                        p1.vy += (Math.sin(angle) * force) / p1.mass;
+                        p2.vx -= (Math.cos(angle) * force) / p2.mass;
+                        p2.vy -= (Math.sin(angle) * force) / p2.mass;
+                    }
+
+                    // Optional connecting lines inside AI cloud
+                    if (dist < 90) {
+                        const lineAlpha = ((90 - dist) / 90) * 0.06;
+                        ctx.strokeStyle = `rgba(109, 40, 217, ${lineAlpha})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // 2. Update positions and draw
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update(time);
                 particles[i].draw();
             }
             
             animationFrameId = requestAnimationFrame(animate);
         };
 
-        // Initialize engine
         initParticles();
     }
 });
