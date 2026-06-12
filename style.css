@@ -1452,6 +1452,8 @@ body.modal-open {
     background: #000;
     border-radius: 12px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Landscape (16:9) modal — wide */
@@ -1464,14 +1466,18 @@ body.modal-open {
     aspect-ratio: unset;
 }
 
-.video-wrapper video,
-.video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
+.video-wrapper video {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    border: none;
+    border-radius: 12px;
+    display: block;
+}
+
+.video-wrapper iframe {
+    width: 100%;
+    flex: 1;
     border: none;
     border-radius: 12px;
     display: block;
@@ -1627,19 +1633,19 @@ body.modal-open {
         transform: none;
     }
 
-    /* Mobile modal — strict viewport constraints to prevent zoom */
+    /* Mobile modal — use nearly full width, let height adapt */
     .modal-content {
-        --modal-h: min(80vh, 80dvh);
-        height: var(--modal-h);
-        width: min(calc(var(--modal-h) * 9 / 16), 88vw);
-        max-width: 88vw;
-        max-height: 80vh;
+        width: 92vw;
+        max-width: 92vw;
+        /* Height based on 9:16 ratio from width, capped at viewport */
+        height: min(calc(92vw * 16 / 9), 85vh, 85dvh);
+        max-height: 85vh;
     }
     .video-modal.modal-landscape .modal-content {
-        width: min(92vw, calc(min(75vh, 75dvh) * 16 / 9));
-        height: min(75vh, 75dvh);
-        max-width: 92vw;
-        max-height: 75vh;
+        width: 96vw;
+        max-width: 96vw;
+        height: min(calc(96vw * 9 / 16), 80vh, 80dvh);
+        max-height: 80vh;
     }
     .modal-close {
         top: 0.75rem;
@@ -1695,18 +1701,17 @@ body.modal-open {
         padding: 1.5rem 1rem;
     }
 
-    /* Small mobile modal — even tighter constraints */
+    /* Small mobile modal — width-first sizing */
     .modal-content {
-        --modal-h: min(75vh, 75dvh);
-        height: var(--modal-h);
-        width: min(calc(var(--modal-h) * 9 / 16), 90vw);
-        max-width: 90vw;
-        max-height: 75vh;
+        width: 96vw;
+        max-width: 96vw;
+        height: min(calc(96vw * 16 / 9), 82vh, 82dvh);
+        max-height: 82vh;
     }
     .video-modal.modal-landscape .modal-content {
-        width: min(96vw, calc(min(70vh, 70dvh) * 16 / 9));
-        height: min(70vh, 70dvh);
-        max-width: 96vw;
-        max-height: 70vh;
+        width: 98vw;
+        max-width: 98vw;
+        height: min(calc(98vw * 9 / 16), 75vh, 75dvh);
+        max-height: 75vh;
     }
 }

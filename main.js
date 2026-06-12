@@ -386,8 +386,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         embedUrl = videoUrl.replace(/\/view.*/, '/preview');
                     }
                     
-                    // No inline styles — CSS handles sizing via position:absolute/inset:0
-                    videoWrapper.innerHTML = `<iframe id="modal-iframe" src="${embedUrl}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                    // CSS handles sizing via flex layout; explicit style ensures mobile compat
+                    videoWrapper.innerHTML = `<iframe id="modal-iframe" src="${embedUrl}" style="width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                 } else {
                     videoWrapper.innerHTML = `<video id="modal-video" controls playsinline src="${encodeURI(decodeURI(videoUrl))}"></video>`;
                     const modalVideo = document.getElementById('modal-video');
