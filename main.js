@@ -386,24 +386,27 @@ document.addEventListener('DOMContentLoaded', () => {
                         embedUrl = videoUrl.replace(/\/view.*/, '/preview');
                     }
                     
-                    videoWrapper.innerHTML = `<iframe id="modal-iframe" src="${embedUrl}" style="width: 100%; height: 100%; border: none; border-radius: 12px;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                    // No inline styles — CSS handles sizing via position:absolute/inset:0
+                    videoWrapper.innerHTML = `<iframe id="modal-iframe" src="${embedUrl}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                 } else {
-                    videoWrapper.innerHTML = `<video id="modal-video" controls playsinline style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px; display: block;" src="${encodeURI(decodeURI(videoUrl))}"></video>`;
+                    videoWrapper.innerHTML = `<video id="modal-video" controls playsinline src="${encodeURI(decodeURI(videoUrl))}"></video>`;
                     const modalVideo = document.getElementById('modal-video');
                     if (modalVideo) {
                         modalVideo.load();
                         modalVideo.play().catch(e => console.log("Modal play blocked:", e));
                     }
                 }
-                
+
                 if (isLandscape) {
                     videoModal.classList.add('modal-landscape');
                 } else {
                     videoModal.classList.remove('modal-landscape');
                 }
-                
+
                 videoModal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; // Lock page scroll
+                // Lock scroll on BOTH html and body — critical for iOS Safari to prevent zoom
+                document.documentElement.classList.add('modal-open');
+                document.body.classList.add('modal-open');
             }
         });
     });
@@ -413,8 +416,10 @@ document.addEventListener('DOMContentLoaded', () => {
             videoWrapper.innerHTML = ''; // Clear video/iframe resources completely
         }
         videoModal.classList.add('hidden');
-        videoModal.classList.remove('modal-landscape'); // Reset state
-        document.body.style.overflow = 'auto'; // Unlock page scroll
+        videoModal.classList.remove('modal-landscape');
+        // Restore scroll on both html and body
+        document.documentElement.classList.remove('modal-open');
+        document.body.classList.remove('modal-open');
     };
 
     modalClose.addEventListener('click', closeModal);
