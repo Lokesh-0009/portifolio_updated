@@ -563,4 +563,167 @@ document.addEventListener('DOMContentLoaded', () => {
             "-=1.0"
         );
     };
+
+    // ==========================================================================
+    // 9. DYNAMIC ANTI-GRAVITY PARTICLE CANVAS BACKGROUND
+    // ==========================================================================
+    const particleCanvas = document.getElementById('particles-canvas');
+    if (particleCanvas) {
+        const ctx = particleCanvas.getContext('2d');
+        let particles = [];
+        let animationFrameId = null;
+        let width = 0;
+        let height = 0;
+        const dpr = window.devicePixelRatio || 1;
+
+        // Track mouse position globally
+        const mouse = {
+            x: null,
+            y: null,
+            radius: 120 // repulsion distance threshold
+        };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // Theme colors with alpha channels (purple, cyan, soft grey)
+        // Adjust values for high premium contrast on a clean white page
+        const particleColors = [
+            'rgba(109, 40, 217, 0.12)', // Deep Purple
+            'rgba(8, 145, 178, 0.12)',  // Cyber Cyan
+            'rgba(15, 23, 42, 0.06)'   // Slate Dark Grey
+        ];
+
+        class Particle {
+            constructor() {
+                this.reset(true);
+            }
+
+            reset(initial = false) {
+                this.x = Math.random() * width;
+                // Start below or at random height if initial run
+                this.y = initial ? Math.random() * height : height + 10;
+                this.size = Math.random() * 2.5 + 0.8; // size 0.8px to 3.3px
+                
+                // Drift base speed (drift horizontally slowly)
+                this.vx = Math.random() * 0.3 - 0.15;
+                // Base anti-gravity rising velocity (float upward)
+                this.vy = -(Math.random() * 0.4 + 0.25);
+                
+                // Randomly choose colors
+                this.color = particleColors[Math.floor(Math.random() * particleColors.length)];
+                
+                // Base opacity for drifting back
+                this.alpha = Math.random() * 0.5 + 0.3;
+                
+                // Track current velocity offsets for mouse reactivity
+                this.offsetX = 0;
+                this.offsetY = 0;
+            }
+
+            update() {
+                // Apply a tiny floating noise to drift velocity
+                this.vx += (Math.random() * 0.04 - 0.02);
+                // Clamp horizontal base velocity
+                this.vx = Math.max(-0.25, Math.min(0.25, this.vx));
+
+                // Mouse interaction / Repulsion
+                if (mouse.x !== null && mouse.y !== null) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const distance = Math.hypot(dx, dy);
+
+                    if (distance < mouse.radius) {
+                        // Calculate force vector away from mouse
+                        const force = (mouse.radius - distance) / mouse.radius;
+                        const angle = Math.atan2(dy, dx);
+                        
+                        // Push velocity
+                        const pushX = Math.cos(angle) * force * 1.8;
+                        const pushY = Math.sin(angle) * force * 1.8;
+                        
+                        // Apply push offsets
+                        this.offsetX += (pushX - this.offsetX) * 0.1;
+                        this.offsetY += (pushY - this.offsetY) * 0.1;
+                    } else {
+                        // Return slowly to zero offset
+                        this.offsetX *= 0.95;
+                        this.offsetY *= 0.95;
+                    }
+                } else {
+                    this.offsetX *= 0.95;
+                    this.offsetY *= 0.95;
+                }
+
+                // Add base velocity + mouse repulsion offset
+                this.x += this.vx + this.offsetX;
+                this.y += this.vy + this.offsetY;
+
+                // Reset particle if it drifts off top or sides
+                if (this.y < -10 || this.x < -10 || this.x > width + 10) {
+                    this.reset(false);
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        const resizeCanvas = () => {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            
+            // Set dimensions on element scaled by DPR to prevent blurry particles
+            particleCanvas.width = width * dpr;
+            particleCanvas.height = height * dpr;
+            ctx.scale(dpr, dpr);
+            
+            // Re-populate particles based on screens size (approx. 1 particle per 15000px^2)
+            const count = Math.min(Math.floor((width * height) / 15000), 100);
+            
+            // Maintain existing particle positions on resize, only adjust count
+            if (particles.length < count) {
+                const diff = count - particles.length;
+                for (let i = 0; i < diff; i++) {
+                    particles.push(new Particle());
+                }
+            } else if (particles.length > count) {
+                particles.splice(count);
+            }
+        };
+
+        const initParticles = () => {
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Start main loop
+            animate();
+        };
+
+        const animate = () => {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Update and draw each particle
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            
+            animationFrameId = requestAnimationFrame(animate);
+        };
+
+        // Initialize engine
+        initParticles();
+    }
 });
