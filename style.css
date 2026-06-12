@@ -315,7 +315,7 @@ body {
     transform: translateY(0);
 }
 
-/* Navigation Header */
+/* Navigation Header — Liquid Glass */
 .main-header {
     position: fixed;
     top: 0;
@@ -324,12 +324,59 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 4rem;
+    padding: 1.25rem 4rem;
     z-index: 1000;
-    background: var(--bg-header);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 
+        0 4px 30px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.4s ease,
+                box-shadow 0.4s ease,
+                border-color 0.4s ease;
+}
+
+/* Liquid shimmer border effect */
+.main-header::before {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(139, 92, 246, 0.3) 20%, 
+        rgba(6, 182, 212, 0.3) 50%, 
+        rgba(139, 92, 246, 0.3) 80%, 
+        transparent 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+/* Enhanced glass when scrolled */
+.main-header.scrolled {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(32px) saturate(200%);
+    -webkit-backdrop-filter: blur(32px) saturate(200%);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.06),
+        0 2px 8px rgba(0, 0, 0, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    border-bottom-color: rgba(255, 255, 255, 0.35);
+    padding: 1rem 4rem;
+}
+
+.main-header.scrolled::before {
+    opacity: 1;
+}
+
+/* Hide on scroll down */
+.main-header.header-hidden {
+    transform: translateY(-100%);
 }
 
 .logo {
@@ -339,6 +386,7 @@ body {
     text-decoration: none;
     color: var(--color-text);
     letter-spacing: 0.5px;
+    transition: var(--transition-fast);
 }
 
 .logo span {
@@ -357,47 +405,69 @@ body {
     font-weight: 500;
     font-size: 0.95rem;
     position: relative;
-    padding: 0.25rem 0;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
     transition: var(--transition-fast);
 }
 
 .nav-link:hover, .nav-link.active {
     color: var(--color-text);
+    background: rgba(139, 92, 246, 0.06);
 }
 
 .nav-link::after {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 0;
     height: 2px;
     background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    border-radius: 1px;
     transition: var(--transition-fast);
 }
 
 .nav-link:hover::after, .nav-link.active::after {
-    width: 100%;
+    width: 60%;
 }
 
+/* CTA Button — Glass variant */
 .btn-cta {
     background: linear-gradient(135deg, var(--color-primary) 0%, #7c3aed 100%);
     border: none;
     color: #fff;
-    padding: 0.75rem 1.75rem;
-    border-radius: 8px;
+    padding: 0.7rem 1.5rem;
+    border-radius: 10px;
     font-family: var(--font-heading);
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     text-decoration: none;
     cursor: pointer;
-    box-shadow: 0 4px 15px var(--border-glow-purple);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
 }
 
 .btn-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-cta:hover::before {
+    left: 100%;
 }
 
 /* Mobile Menu Toggle */
@@ -1432,7 +1502,10 @@ body {
 
 @media (max-width: 768px) {
     .main-header {
-        padding: 1.25rem 2rem;
+        padding: 1rem 1.5rem;
+    }
+    .main-header.scrolled {
+        padding: 0.75rem 1.5rem;
     }
     .nav-menu {
         position: fixed;

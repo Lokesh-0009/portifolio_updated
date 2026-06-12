@@ -56,6 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(updateLoader, 300);
 
     // 2. AUTOMATIC ENTRANCE & AUTOPLAY WITH INTERACTIVE UNMUTE
+    const mainHeader = document.getElementById('main-header');
+    
+    // Hide header initially (it's outside app-container now)
+    if (mainHeader) mainHeader.classList.add('hidden');
+
     const enterPortfolioAutomatically = () => {
         // Autoplay background video (Muted initially to pass browser policy)
         if (bgVideo) {
@@ -82,6 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 { opacity: 0, y: 20 }, 
                 { opacity: 1, y: 0, duration: 0.8, delay: 0.5, ease: "power3.out" }
             );
+        }
+
+        // Reveal header (now outside app-container)
+        if (mainHeader) {
+            mainHeader.classList.remove('hidden');
         }
 
         // Reveal Portfolio content
@@ -191,6 +201,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     revealElements.forEach(el => revealObserver.observe(el));
+
+    // Scroll-based header behavior: show on scroll up, hide on scroll down, glass effect on scroll
+    let lastScrollY = 0;
+    let headerHidden = false;
+    const scrollThreshold = 5; // Dead zone to prevent jitter
+
+    window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        const header = document.getElementById('main-header');
+        if (!header) return;
+
+        // Add 'scrolled' class for enhanced glass effect when past hero
+        if (currentScrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+
+        // Show/hide based on scroll direction
+        if (Math.abs(currentScrollY - lastScrollY) < scrollThreshold) return;
+
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            // Scrolling DOWN — hide header
+            if (!headerHidden) {
+                header.classList.add('header-hidden');
+                headerHidden = true;
+            }
+        } else {
+            // Scrolling UP — show header
+            if (headerHidden) {
+                header.classList.remove('header-hidden');
+                headerHidden = false;
+            }
+        }
+
+        lastScrollY = currentScrollY;
+    }, { passive: true });
 
     // Mobile Menu Toggle
     mobileMenuToggle.addEventListener('click', () => {
