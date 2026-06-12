@@ -8,7 +8,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=EB+Garamond:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Stylesheet -->
@@ -31,24 +31,9 @@
             </div>
         </div>
     </div>
-
-    <!-- Fullscreen Looping Background Video (Removed)
-    <div id="bg-video-container" class="bg-video-container">
-        <video id="bg-video" src="intro.mp4" playsinline preload="auto"></video>
-        <div class="bg-video-overlay"></div>
-    </div>
-    -->
-
     <!-- Ambient Grid & Particles for Cinematic Aesthetic -->
     <div class="ambient-grid"></div>
     <div class="vignette-overlay"></div>
-
-    <!-- Floating Audio Control (Removed)
-    <button id="btn-audio-toggle" class="btn-audio-toggle hidden" aria-label="Toggle Sound">
-        <i class="fa-solid fa-volume-xmark"></i>
-        <span>Sound Off</span>
-    </button>
-    -->
 
     <!-- Main App Container -->
     <div id="app-container" class="app-container hidden">
@@ -75,27 +60,40 @@
                 <div class="neon-light purple"></div>
                 <div class="neon-light blue"></div>
             </div>
-            <div class="container hero-content">
-                <div class="tagline-badge">
-                    <span class="pulse-dot"></span>
-                    <span>Available for Freelance Projects</span>
+            <div class="container hero-grid-layout">
+                <div class="hero-text-side">
+                    <div class="tagline-badge">
+                        <span class="pulse-dot"></span>
+                        <span>Available for Freelance Projects</span>
+                    </div>
+                    <div class="hero-greeting">Hi! I'm Lokesh</div>
+                    <h1 class="hero-title">
+                        <span class="line-1">VIDEO EDITOR &</span>
+                        <span class="line-2 text-gradient">STORYTELLER</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        I transform raw footage and ideas into high-engaging visual stories through cutting-edge editing, dynamic motion graphics, and Hollywood-grade color grading.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#work" class="btn-primary">
+                            <span>Explore Showcase</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#contact" class="btn-secondary">
+                            <i class="fa-solid fa-envelope"></i>
+                            <span>Hire Me</span>
+                        </a>
+                    </div>
                 </div>
-                <h1 class="hero-title">
-                    <span class="line-1">VIDEO EDITOR &</span>
-                    <span class="line-2 text-gradient">STORYTELLER</span>
-                </h1>
-                <p class="hero-subtitle">
-                    I transform raw footage and ideas into high-engaging visual stories through cutting-edge editing, dynamic motion graphics, and Hollywood-grade color grading.
-                </p>
-                <div class="hero-actions">
-                    <a href="#work" class="btn-primary">
-                        <span>Explore Showcase</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                    <a href="#contact" class="btn-secondary">
-                        <i class="fa-solid fa-envelope"></i>
-                        <span>Hire Me</span>
-                    </a>
+                <div class="hero-image-side">
+                    <div class="hero-image-wrapper">
+                        <img src="assets/hero_profile.png?v=6" alt="Lokesh - Professional Video Editor">
+                        <div class="profile-socials-pill">
+                            <span>FOLLOW ME ON:</span>
+                            <a href="https://www.instagram.com/lokesh__verse/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="https://www.linkedin.com/in/rowtulokesh/?locale=en" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -111,19 +109,7 @@
 
                 <!-- Project Grid -->
                 <div class="portfolio-grid">
-                    <!-- Project: Intro -->
-                    <div class="project-card landscape-card" data-video="intro.mp4" data-aspect="16-9">
-                        <div class="project-media landscape">
-                            <img src="assets/intro.png" alt="Intro & Showreel - Lokesh Edits">
-                            <div class="project-overlay">
-                                <span class="play-icon"><i class="fa-solid fa-play"></i></span>
-                                <div class="project-meta">
-                                    <span class="project-category">Intro / Showreel</span>
-                                    <h3 class="project-name">Lokesh Edits Showreel</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                     <!-- Project 1 -->
                     <div class="project-card" data-video="Sequence 01.mp4">
                         <div class="project-media">
@@ -164,6 +150,19 @@
                         </div>
                     </div>
                     <!-- Project 4 -->
+                    <div class="project-card" data-video="2reel.mp4">
+                        <div class="project-media">
+                            <img src="assets/2reel.png" alt="Founder Branding - 2Reel">
+                            <div class="project-overlay">
+                                <span class="play-icon"><i class="fa-solid fa-play"></i></span>
+                                <div class="project-meta">
+                                    <span class="project-category">Short Form / Reels</span>
+                                    <h3 class="project-name">Founder Branding</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project 5 -->
                     <div class="project-card landscape-card" data-video="promotional.mp4" data-aspect="16-9">
                         <div class="project-media landscape">
                             <img src="assets/promotional.png" alt="Commercial Edit - Promotional">

@@ -263,7 +263,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const videoUrl = card.getAttribute('data-video');
             const isLandscape = card.getAttribute('data-aspect') === '16-9' || card.classList.contains('landscape-card');
             if (modalVideo && videoUrl) {
-                modalVideo.setAttribute('src', videoUrl);
+                // Encode the URL to properly handle spaces or special characters in filenames
+                modalVideo.setAttribute('src', encodeURI(videoUrl));
+                modalVideo.load(); // Force browser to load the new video source
                 
                 if (isLandscape) {
                     videoModal.classList.add('modal-landscape');
@@ -281,7 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModal = () => {
         if (modalVideo) {
             modalVideo.pause();
-            modalVideo.setAttribute('src', '');
+            modalVideo.removeAttribute('src'); // Clear video src attribute
+            modalVideo.load(); // Force release of video resources
         }
         videoModal.classList.add('hidden');
         videoModal.classList.remove('modal-landscape'); // Reset state
@@ -384,6 +387,12 @@ document.addEventListener('DOMContentLoaded', () => {
             "-=0.4"
         );
 
+        tl.fromTo('.hero-greeting', 
+            { opacity: 0, y: 30 }, 
+            { opacity: 1, y: 0, duration: 1, ease: "power4.out" },
+            "-=0.8"
+        );
+
         tl.fromTo('.hero-title .line-1', 
             { opacity: 0, y: 60 }, 
             { opacity: 1, y: 0, duration: 1.2, ease: "power4.out" },
@@ -400,6 +409,12 @@ document.addEventListener('DOMContentLoaded', () => {
             { opacity: 0, y: 30 }, 
             { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" },
             "-=0.8"
+        );
+
+        tl.fromTo('.hero-image-wrapper', 
+            { opacity: 0, scale: 0.95, y: 20 }, 
+            { opacity: 1, scale: 1, y: 0, duration: 1.5, ease: "power4.out" },
+            "-=1.2"
         );
 
         tl.fromTo('.hero-actions .btn-primary', 
