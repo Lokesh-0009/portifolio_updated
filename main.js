@@ -586,7 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
 
-                    videoWrapper.innerHTML = `<video id="modal-video" autoplay muted playsinline src="${encodeURI(decodeURI(playUrl))}"></video>`;
+                    videoWrapper.innerHTML = `<video id="modal-video" ${isMobile ? 'controls' : ''} autoplay muted playsinline src="${encodeURI(decodeURI(playUrl))}"></video>`;
                     const modalVideo = document.getElementById('modal-video');
                     if (modalVideo) {
                         modalVideo.load();
