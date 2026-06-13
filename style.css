@@ -2038,17 +2038,4 @@ body.modal-open {
     video::-webkit-media-controls-start-playback-button {
         display: none !important;
     }
-
-    /* Google Drive iframe preview controls masking: crops 60px off top and bottom */
-    .video-wrapper {
-        position: relative;
-        overflow: hidden;
-    }
-    .video-wrapper iframe {
-        position: absolute;
-        width: 100%;
-        height: calc(100% + 120px) !important;
-        top: -60px !important;
-        left: 0;
-    }
 }
