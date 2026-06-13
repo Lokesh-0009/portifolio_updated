@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const updateLoader = () => {
-        progress += Math.random() * 8 + 2;
+        progress += Math.random() * 15 + 10;
         if (progress >= 100) {
             progress = 100;
             timelineBar.style.width = `100%`;
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             setTimeout(() => {
                 enterPortfolioAutomatically();
-            }, 500);
+            }, 200);
         } else {
             timelineBar.style.width = `${progress}%`;
             timelinePlayhead.style.left = `${progress}%`;
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const stepIndex = Math.min(Math.floor((progress / 100) * loadingSteps.length), loadingSteps.length - 2);
             loaderStatus.textContent = loadingSteps[stepIndex];
             
-            setTimeout(updateLoader, 50 + Math.random() * 100);
+            setTimeout(updateLoader, 20 + Math.random() * 30);
         }
     };
 
@@ -760,6 +760,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const onMouseDown = (e) => {
+            if (window.innerWidth <= 768) return;
             const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
             const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
             if (clientX === undefined || clientY === undefined) return;
@@ -794,6 +795,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const onMouseMove = (e) => {
+            if (window.innerWidth <= 768) return;
             const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
             const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
             if (clientX === undefined || clientY === undefined) return;
@@ -803,6 +805,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const onMouseUp = () => {
+            if (window.innerWidth <= 768) return;
             if (draggedParticle) {
                 draggedParticle.isDragging = false;
                 draggedParticle = null;
@@ -1027,6 +1030,16 @@ document.addEventListener('DOMContentLoaded', () => {
             width = window.innerWidth;
             height = window.innerHeight;
             
+            if (width <= 768) {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                    animationFrameId = null;
+                }
+                ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+                particles = [];
+                return;
+            }
+            
             particleCanvas.width = width * dpr;
             particleCanvas.height = height * dpr;
             ctx.scale(dpr, dpr);
@@ -1043,15 +1056,26 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (particles.length > count) {
                 particles.splice(count);
             }
+
+            if (!animationFrameId) {
+                animate(0);
+            }
         };
 
         const initParticles = () => {
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
-            animate(0);
+            if (window.innerWidth > 768) {
+                animate(0);
+            }
         };
 
         const animate = (timestamp) => {
+            if (window.innerWidth <= 768) {
+                ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+                animationFrameId = null;
+                return;
+            }
             ctx.clearRect(0, 0, width, height);
             
             const time = timestamp || 0;

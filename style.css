@@ -1697,6 +1697,15 @@ body.modal-open {
 }
 
 @media (max-width: 768px) {
+    .particles-canvas {
+        display: none !important;
+    }
+    .neon-light {
+        display: none !important;
+    }
+    .hero-image-wrapper::before {
+        display: none !important;
+    }
     body.menu-open {
         overflow: hidden !important;
     }
