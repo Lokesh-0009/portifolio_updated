@@ -559,16 +559,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     videoWrapper.innerHTML = `<iframe id="modal-iframe" src="${embedUrl}" style="width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                 } else {
-                    // Show custom controls overlay for direct video elements
-                    if (customVideoControls) customVideoControls.classList.remove('hidden');
+                    const isMobile = window.innerWidth <= 768;
+                    // Show custom controls overlay for direct video elements only on desktop
+                    if (customVideoControls) {
+                        if (isMobile) {
+                            customVideoControls.classList.add('hidden');
+                        } else {
+                            customVideoControls.classList.remove('hidden');
+                        }
+                    }
 
-                    videoWrapper.innerHTML = `<video id="modal-video" playsinline src="${encodeURI(decodeURI(videoUrl))}"></video>`;
+                    videoWrapper.innerHTML = `<video id="modal-video" ${isMobile ? 'controls' : ''} playsinline src="${encodeURI(decodeURI(videoUrl))}"></video>`;
                     const modalVideo = document.getElementById('modal-video');
                     if (modalVideo) {
                         modalVideo.load();
                         modalVideo.play().catch(e => console.log("Modal play blocked:", e));
                         
-                        setupCustomControls(modalVideo);
+                        if (!isMobile) {
+                            setupCustomControls(modalVideo);
+                        }
                     }
                 }
 
