@@ -547,7 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const isMobile = window.innerWidth <= 768;
 
-                if (isDrive && !isMobile) {
+                if (isDrive) {
                     // Hide custom controls overlay for iframe embeds
                     if (customVideoControls) customVideoControls.classList.add('hidden');
 
@@ -573,16 +573,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Convert Drive URL to direct stream link for HTML5 video element on mobile
                     let playUrl = videoUrl;
                     if (isDrive) {
-                        if (videoUrl.includes('uc?export=download&id=')) {
-                            const id = videoUrl.split('id=')[1].split('&')[0];
-                            playUrl = `https://drive.google.com/uc?export=download&id=${id}`;
+                        let id = '';
+                        if (videoUrl.includes('id=')) {
+                            id = videoUrl.split('id=')[1].split('&')[0];
                         } else if (videoUrl.includes('/file/d/')) {
-                            const id = videoUrl.split('/file/d/')[1].split('/')[0];
-                            playUrl = `https://drive.google.com/uc?export=download&id=${id}`;
+                            id = videoUrl.split('/file/d/')[1].split('/')[0];
+                        }
+                        if (id) {
+                            // Use direct streaming uc?id= endpoint instead of export=download to bypass Content-Disposition: attachment blocks on mobile Safari
+                            playUrl = `https://drive.google.com/uc?id=${id}`;
                         }
                     }
 
-                    videoWrapper.innerHTML = `<video id="modal-video" ${isMobile ? 'controls' : ''} playsinline src="${encodeURI(decodeURI(playUrl))}"></video>`;
+                    videoWrapper.innerHTML = `<video id="modal-video" ${isMobile ? 'controls autoplay muted' : ''} playsinline src="${encodeURI(decodeURI(playUrl))}"></video>`;
                     const modalVideo = document.getElementById('modal-video');
                     if (modalVideo) {
                         modalVideo.load();
