@@ -2023,3 +2023,32 @@ body.modal-open {
         max-height: 75vh;
     }
 }
+
+/* Mobile browser video controls and Google Drive iframe controls masking overrides */
+@media (max-width: 768px) {
+    video::-webkit-media-controls {
+        display: none !important;
+    }
+    video::-webkit-media-controls-panel {
+        display: none !important;
+    }
+    video::-webkit-media-controls-play-button {
+        display: none !important;
+    }
+    video::-webkit-media-controls-start-playback-button {
+        display: none !important;
+    }
+
+    /* Google Drive iframe preview controls masking: crops 60px off top and bottom */
+    .video-wrapper {
+        position: relative;
+        overflow: hidden;
+    }
+    .video-wrapper iframe {
+        position: absolute;
+        width: 100%;
+        height: calc(100% + 120px) !important;
+        top: -60px !important;
+        left: 0;
+    }
+}

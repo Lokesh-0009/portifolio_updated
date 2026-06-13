@@ -559,6 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         embedUrl = videoUrl.replace(/\/view.*/, '/preview');
                     }
                     
+                    console.log("Drive iframe used");
                     videoWrapper.innerHTML = `<iframe id="modal-iframe" src="${embedUrl}" style="width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                 } else {
                     // Show custom controls overlay for direct video elements only on desktop
@@ -585,7 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
 
-                    videoWrapper.innerHTML = `<video id="modal-video" ${isMobile ? 'controls autoplay muted' : ''} playsinline src="${encodeURI(decodeURI(playUrl))}"></video>`;
+                    videoWrapper.innerHTML = `<video id="modal-video" autoplay muted playsinline src="${encodeURI(decodeURI(playUrl))}"></video>`;
                     const modalVideo = document.getElementById('modal-video');
                     if (modalVideo) {
                         modalVideo.load();
