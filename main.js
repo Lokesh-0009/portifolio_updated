@@ -545,7 +545,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (videoWrapper && videoUrl) {
                 const isDrive = videoUrl.includes('drive.google.com');
 
-                if (isDrive) {
+                const isMobile = window.innerWidth <= 768;
+
+                if (isDrive && !isMobile) {
                     // Hide custom controls overlay for iframe embeds
                     if (customVideoControls) customVideoControls.classList.add('hidden');
 
@@ -559,7 +561,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     videoWrapper.innerHTML = `<iframe id="modal-iframe" src="${embedUrl}" style="width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                 } else {
-                    const isMobile = window.innerWidth <= 768;
                     // Show custom controls overlay for direct video elements only on desktop
                     if (customVideoControls) {
                         if (isMobile) {
@@ -569,7 +570,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
 
-                    videoWrapper.innerHTML = `<video id="modal-video" ${isMobile ? 'controls' : ''} playsinline src="${encodeURI(decodeURI(videoUrl))}"></video>`;
+                    // Convert Drive URL to direct stream link for HTML5 video element on mobile
+                    let playUrl = videoUrl;
+                    if (isDrive) {
+                        if (videoUrl.includes('uc?export=download&id=')) {
+                            const id = videoUrl.split('id=')[1].split('&')[0];
+                            playUrl = `https://drive.google.com/uc?export=download&id=${id}`;
+                        } else if (videoUrl.includes('/file/d/')) {
+                            const id = videoUrl.split('/file/d/')[1].split('/')[0];
+                            playUrl = `https://drive.google.com/uc?export=download&id=${id}`;
+                        }
+                    }
+
+                    videoWrapper.innerHTML = `<video id="modal-video" ${isMobile ? 'controls' : ''} playsinline src="${encodeURI(decodeURI(playUrl))}"></video>`;
                     const modalVideo = document.getElementById('modal-video');
                     if (modalVideo) {
                         modalVideo.load();
