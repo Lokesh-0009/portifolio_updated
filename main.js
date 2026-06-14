@@ -586,11 +586,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
 
-                    videoWrapper.innerHTML = `<video id="modal-video" ${isMobile ? 'controls' : ''} autoplay muted playsinline src="${encodeURI(decodeURI(playUrl))}"></video>`;
+                    videoWrapper.innerHTML = `<video id="modal-video" ${isMobile ? 'controls' : ''} autoplay playsinline src="${encodeURI(decodeURI(playUrl))}"></video>`;
                     const modalVideo = document.getElementById('modal-video');
                     if (modalVideo) {
+                        modalVideo.muted = false;
                         modalVideo.load();
-                        modalVideo.play().catch(e => console.log("Modal play blocked:", e));
+                        modalVideo.play().catch(e => {
+                            console.log("Modal play blocked unmuted:", e);
+                            modalVideo.muted = true;
+                            modalVideo.play().catch(err => console.log("Muted fallback play failed too:", err));
+                        });
                         
                         if (!isMobile) {
                             setupCustomControls(modalVideo);
