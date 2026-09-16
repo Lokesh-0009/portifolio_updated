@@ -303,6 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = [
         { id: 'hero',     selector: '[href="#hero"]' },
         { id: 'work',     selector: '[href="#work"]' },
+        { id: 'software', selector: '[href="#software"]' },
         { id: 'services', selector: '[href="#services"]' },
         { id: 'contact',  selector: '[href="#contact"]' },
     ];
