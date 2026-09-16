@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lokesh Edits | Premium Video Editor & Storyteller</title>
+    <meta name="description" content="Portfolio of Lokesh Edits, a professional freelance video editor specializing in YouTube Shorts, commercials, motion graphics, and cinematic storytelling.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=EB+Garamond:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Loading Screen / Enter Splash -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loader-content">
+            <h1 class="loader-logo">LOKESH<span>EDITS</span></h1>
+            
+            <div id="loader-progress-area" class="loader-progress-area">
+                <div class="timeline-loader">
+                    <div class="timeline-track"></div>
+                    <div class="timeline-playhead"></div>
+                    <div class="timeline-bar"></div>
+                </div>
+                <p class="loader-status">Initializing timeline...</p>
+            </div>
+        </div>
+    </div>
+    <!-- Ambient Grid & Particles for Cinematic Aesthetic -->
+    <div class="ambient-grid"></div>
+    <div class="vignette-overlay"></div>
+    <canvas id="particles-canvas" class="particles-canvas"></canvas>
+
+    <!-- Premium Liquid Glass Navigation (outside app-container so fixed positioning works) -->
+    <header id="main-header" class="main-header">
+        <a href="#" class="logo">LOKESH<span>EDITS</span></a>
+        <nav class="nav-menu">
+            <a href="#hero" class="nav-link active">Home</a>
+            <a href="#work" class="nav-link">Work</a>
+            <a href="#services" class="nav-link">Services</a>
+            <a href="#contact" class="nav-link">Hire Me</a>
+        </nav>
+        <a href="#contact" class="btn-cta header-cta">Let's Collaborate</a>
+        <button class="mobile-menu-toggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Main App Container -->
+    <div id="app-container" class="app-container hidden">
+
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-bg-effects">
+                <div class="neon-light red"></div>
+                <div class="neon-light dark-red"></div>
+            </div>
+            <div class="container hero-grid-layout">
+                <div class="hero-text-side">
+                    <div class="tagline-badge">
+                        <span class="pulse-dot"></span>
+                        <span>Available for Freelance Projects</span>
+                    </div>
+                    <div class="hero-greeting">Hi! I'm Lokesh</div>
+                    <h1 class="hero-title">
+                        <span class="line-1">VIDEO EDITOR &</span>
+                        <span class="line-2 text-gradient">STORYTELLER</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        I transform raw footage and ideas into high-engaging visual stories through cutting-edge editing, dynamic motion graphics, and Hollywood-grade color grading.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#work" class="btn-primary">
+                            <span>Explore Showcase</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#contact" class="btn-secondary">
+                            <i class="fa-solid fa-envelope"></i>
+                            <span>Hire Me</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image-side">
+                    <div class="hero-image-wrapper">
+                        <img src="assets/hero_profile.png?v=7" alt="Lokesh - Professional Video Editor" fetchpriority="high">
+                        <div class="profile-socials-pill">
+                            <span class="social-pill-label">FOLLOW ME ON:</span>
+                            <div class="social-pill-icons">
+                                <a href="https://www.instagram.com/lokesh__verse/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-btn social-instagram" title="Instagram">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                </a>
+                                <a href="https://www.linkedin.com/in/rowtulokesh/?locale=en" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-btn social-linkedin" title="LinkedIn">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45c-.89 0-1.61.72-1.61 1.61 0 .88.72 1.6 1.61 1.6.89 0 1.61-.72 1.61-1.6 0-.89-.72-1.61-1.61-1.61Z"/></svg>
+                                </a>
+                                <a href="https://github.com/rowtulokesh" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-btn social-github" title="GitHub">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Showcase Section -->
+        <section id="work" class="portfolio-section reveal">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Showcase</span>
+                    <h2 class="section-title">Selected Projects</h2>
+                    <p class="section-desc">A curated selection of edits engineered to grab attention, build audiences, and drive conversions.</p>
+                </div>
+
+                <!-- Project Grid -->
+                <div class="portfolio-grid">
+                    <!-- Project 1: Brandfra -->
+                    <div class="project-card" data-video="https://www.youtube.com/embed/Wquh8p37Zps" data-aspect="9-16">
+                        <div class="project-media">
+                            <img src="assets/brandfra.png" alt="Brandfra - AI Automation Strategist Video Edit" loading="lazy">
+                            <div class="project-overlay">
+                                <span class="play-icon"><i class="fa-solid fa-play"></i></span>
+                                <div class="project-meta">
+                                    <span class="project-category">Client Showcase / Intro</span>
+                                    <h3 class="project-name">Brandfra</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 2: Promotional Video -->
+                    <div class="project-card landscape-card" data-video="https://www.youtube.com/embed/PyLbXfNRtjI" data-aspect="16-9">
+                        <div class="project-media landscape">
+                            <img src="assets/promotional.png" alt="Commercial Edit - Promotional Video" loading="lazy">
+                            <div class="project-overlay">
+                                <span class="play-icon"><i class="fa-solid fa-play"></i></span>
+                                <div class="project-meta">
+                                    <span class="project-category">Commercial / Ads</span>
+                                    <h3 class="project-name">Promotional Video</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 3: Backbone of SAP -->
+                    <div class="project-card" data-video="https://www.youtube.com/embed/ZTqJB8IJUFI" data-aspect="9-16">
+                        <div class="project-media">
+                            <img src="assets/webapp_sap.png" alt="Founder Branding - Webapp Backbone of SAP" loading="lazy">
+                            <div class="project-overlay">
+                                <span class="play-icon"><i class="fa-solid fa-play"></i></span>
+                                <div class="project-meta">
+                                    <span class="project-category">Short Form / Branding</span>
+                                    <h3 class="project-name">Backbone of SAP</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 4: Many Homeowners -->
+                    <div class="project-card" data-video="https://www.youtube.com/embed/4k1FiOlZCrA" data-aspect="9-16">
+                        <div class="project-media">
+                            <img src="assets/awareness.png" alt="Awareness Campaign - Many Homeowners" loading="lazy">
+                            <div class="project-overlay">
+                                <span class="play-icon"><i class="fa-solid fa-play"></i></span>
+                                <div class="project-meta">
+                                    <span class="project-category">Short Form / Awareness</span>
+                                    <h3 class="project-name">Many Homeowners</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 5: Agency Promo -->
+                    <div class="project-card" data-video="https://www.youtube.com/embed/qWIHVacghY4" data-aspect="9-16">
+                        <div class="project-media">
+                            <img src="assets/promotional_reel.png" alt="Short Form Reel - Agency Promo" loading="lazy">
+                            <div class="project-overlay">
+                                <span class="play-icon"><i class="fa-solid fa-play"></i></span>
+                                <div class="project-meta">
+                                    <span class="project-category">Short Form / Promo</span>
+                                    <h3 class="project-name">Agency Promo</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="services-section reveal">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Services</span>
+                    <h2 class="section-title">Post-Production Mastery</h2>
+                    <p class="section-desc">Taking projects from a raw folder of clips into a polished, high-retention masterpiece.</p>
+                </div>
+
+                <div class="services-grid">
+                    <!-- Service 1 -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-clapperboard"></i>
+                        </div>
+                        <h3 class="service-name">Creative Editing</h3>
+                        <p class="service-desc">Fluid pacing, multi-camera syncing, sound syncs, and storytelling structure tailored to hook viewers in the first 3 seconds.</p>
+                        <div class="card-timeline">
+                            <div class="timeline-clip clip-purple"></div>
+                            <div class="timeline-clip clip-blue"></div>
+                        </div>
+                    </div>
+                    <!-- Service 2 -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <h3 class="service-name">Motion Graphics</h3>
+                        <p class="service-desc">Custom transitions, kinetic typography, screen overlays, logo animations, and VFX inspired by After Effects styling.</p>
+                        <div class="card-timeline">
+                            <div class="timeline-keyframes">
+                                <span class="keyframe"></span>
+                                <span class="keyframe-line"></span>
+                                <span class="keyframe"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Service 3 -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                        </div>
+                        <h3 class="service-name">Cinematic Color</h3>
+                        <p class="service-desc">Professional color correction, skin-tone matching, and creative grading LUTs matching DaVinci/Premiere workflows.</p>
+                        <div class="card-timeline">
+                            <div class="color-wheel-visual">
+                                <div class="color-wheel-circle"></div>
+                                <div class="color-wheel-pointer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Service 4 -->
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </div>
+                        <h3 class="service-name">Sound Design</h3>
+                        <p class="service-desc">Audio leveling, ambient SFX, sub-bass impacts, swoshes, risers, custom audio ducking, and voiceover enhancement.</p>
+                        <div class="card-timeline">
+                            <div class="audio-waves-visual">
+                                <span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Stats Section -->
+        <section id="stats" class="stats-section reveal">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number" data-target="50">0</div>
+                        <div class="stat-label">Projects Completed</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" data-target="2">0</div>
+                        <div class="stat-label">Total Views Generated</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" data-target="10">0</div>
+                        <div class="stat-label">Happy Creators</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" data-target="2">0</div>
+                        <div class="stat-label">Years of Experience</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section reveal">
+            <div class="container">
+                <div class="contact-wrapper glass-panel">
+                    <div class="contact-info">
+                        <span class="section-tag">Let's Talk</span>
+                        <h2 class="contact-title">Ready to level up your content?</h2>
+                        <p class="contact-desc">Whether you need YouTube Shorts, ads, or high-end animations, let's craft a story that grabs attention and holds it.</p>
+                        
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <i class="fa-solid fa-envelope"></i>
+                                <div>
+                                    <h4>Email Me</h4>
+                                    <a href="mailto:rowwtulokesh1123@gmail.com">rowwtulokesh1123@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <div>
+                                    <h4>Based In</h4>
+                                    <p>India / Remote</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="social-links">
+                            <a href="https://www.instagram.com/lokesh__verse/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="contact-form-container">
+                        <form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+                            <input type="hidden" name="access_key" id="web3forms-access-key" value="06f92320-e0bb-4d4a-b86f-5ed9c65699a4">
+                            <input type="hidden" name="subject" value="New Portfolio Inquiry!">
+                            <input type="checkbox" name="botcheck" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name">Your Name</label>
+                                    <input type="text" id="name" name="name" required placeholder="John Doe">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" name="email" required placeholder="john@example.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="project-type">Project Type</label>
+                                <select id="project-type" name="project-type">
+                                    <option value="shorts">YouTube Shorts / Reels</option>
+                                    <option value="commercial">Commercial Video / Ads</option>
+                                    <option value="cinematic">Cinematic Video Project</option>
+                                    <option value="motion">Motion Graphics & Animation</option>
+                                    <option value="other">Other / Full Pack</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Project Details</label>
+                                <textarea id="message" name="message" rows="5" required placeholder="Tell me about your project, target audience, and editing style requirements..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit">
+                                <span>Send Message</span>
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="container footer-content">
+                <p>&copy; 2026 Lokesh Edits. All Rights Reserved. Crafted for Storytellers.</p>
+                <div class="footer-links">
+                    <a href="#work">Work</a>
+                    <a href="#services">Services</a>
+                    <a href="#contact">Hire Me</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Video Modal (For work preview playing) -->
+    <div id="video-modal" class="video-modal hidden">
+        <button class="modal-close" aria-label="Close modal"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-content glass-panel">
+            <div class="video-wrapper">
+                <video id="modal-video" controls playsinline src=""></video>
+            </div>
+            <!-- Custom HTML5 Video Controls overlay -->
+            <div id="custom-video-controls" class="custom-video-controls hidden">
+                <button class="control-btn play-btn" aria-label="Play/Pause"><i class="fa-solid fa-play"></i></button>
+                <div class="timeline-container">
+                    <input type="range" class="timeline-slider" min="0" max="100" value="0" step="0.1">
+                    <div class="timeline-progress"></div>
+                </div>
+                <span class="time-display">0:00 / 0:00</span>
+                <button class="control-btn volume-btn" aria-label="Mute/Unmute"><i class="fa-solid fa-volume-high"></i></button>
+                
+                <div class="settings-container">
+                    <button class="control-btn settings-btn" aria-label="Settings"><i class="fa-solid fa-gear"></i></button>
+                    <div class="settings-dropdown hidden">
+                        <div class="settings-item mobile-only-setting">
+                            <span>Mute</span>
+                            <button class="control-btn volume-btn-mobile" aria-label="Mute/Unmute"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                        <div class="settings-item">
+                            <span>Speed</span>
+                            <select class="speed-select">
+                                <option value="0.5">0.5x</option>
+                                <option value="1" selected>Normal</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="2">2.0x</option>
+                            </select>
+                        </div>
+                        <div class="settings-item mobile-only-setting">
+                            <span>Fullscreen</span>
+                            <button class="control-btn fullscreen-btn-mobile" aria-label="Fullscreen"><i class="fa-solid fa-expand"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="control-btn fullscreen-btn" aria-label="Fullscreen"><i class="fa-solid fa-expand"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include GSAP and Custom JS Modules -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
