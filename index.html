@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lokesh Edits | Premium Video Editor & Storyteller</title>
     <meta name="description" content="Portfolio of Lokesh Edits, a professional freelance video editor specializing in YouTube Shorts, commercials, motion graphics, and cinematic storytelling.">
-    <!-- Google Fonts -->
+    <!-- Google Fonts: Geist & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=EB+Garamond:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Stylesheet -->
@@ -36,6 +36,10 @@
     <div class="vignette-overlay"></div>
     <canvas id="particles-canvas" class="particles-canvas"></canvas>
 
+    <!-- Custom Magnetic Gaming/Cinema Cursor -->
+    <div id="custom-cursor" class="custom-cursor"><span class="cursor-label">PLAY</span></div>
+    <div id="custom-cursor-dot" class="custom-cursor-dot"></div>
+
     <!-- Premium Liquid Glass Navigation (outside app-container so fixed positioning works) -->
     <header id="main-header" class="main-header">
         <a href="#" class="logo">LOKESH<span>EDITS</span></a>
@@ -43,7 +47,9 @@
             <a href="#hero" class="nav-link active">Home</a>
             <a href="#work" class="nav-link">Work</a>
             <a href="#software" class="nav-link">Tools</a>
+            <a href="#process" class="nav-link">Process</a>
             <a href="#services" class="nav-link">Services</a>
+            <a href="#reviews" class="nav-link">Reviews</a>
             <a href="#contact" class="nav-link">Hire Me</a>
         </nav>
         <a href="#contact" class="btn-cta header-cta">Let's Collaborate</a>
@@ -119,10 +125,18 @@
                     <p class="section-desc">A curated selection of edits engineered to grab attention, build audiences, and drive conversions.</p>
                 </div>
 
+                <!-- Category Filters -->
+                <div class="portfolio-filters">
+                    <button class="filter-btn active" data-filter="all">All Projects <span class="filter-count">6</span></button>
+                    <button class="filter-btn" data-filter="short-form">Short Form / Reels <span class="filter-count">4</span></button>
+                    <button class="filter-btn" data-filter="commercial">Commercial & Ads <span class="filter-count">1</span></button>
+                    <button class="filter-btn" data-filter="talking-head">Talking Head / Promo <span class="filter-count">1</span></button>
+                </div>
+
                 <!-- Project Grid -->
                 <div class="portfolio-grid">
                     <!-- Project 1: Brandfra -->
-                    <div class="project-card" data-video="https://www.youtube.com/embed/Wquh8p37Zps" data-aspect="9-16">
+                    <div class="project-card" data-category="short-form" data-video="https://www.youtube.com/embed/Wquh8p37Zps" data-aspect="9-16">
                         <div class="project-media">
                             <img src="assets/brandfra.png" alt="Brandfra - AI Automation Strategist Video Edit" loading="lazy">
                             <div class="project-overlay">
@@ -135,8 +149,22 @@
                         </div>
                     </div>
 
-                    <!-- Project 2: Promotional Video -->
-                    <div class="project-card landscape-card" data-video="https://www.youtube.com/embed/PyLbXfNRtjI" data-aspect="16-9">
+                    <!-- Project 2: Talking Head Promotion Ad -->
+                    <div class="project-card" data-category="talking-head" data-video="https://www.youtube.com/embed/letG-eF0G14" data-aspect="9-16">
+                        <div class="project-media">
+                            <img src="assets/talking_head.png" alt="Talking Head Promotion Ad" loading="lazy">
+                            <div class="project-overlay">
+                                <span class="play-icon"><i class="fa-solid fa-play"></i></span>
+                                <div class="project-meta">
+                                    <span class="project-category">Commercial / Promo Ad</span>
+                                    <h3 class="project-name">Taking Head Promotion Ad</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 3: Promotional Video -->
+                    <div class="project-card landscape-card" data-category="commercial" data-video="https://www.youtube.com/embed/PyLbXfNRtjI" data-aspect="16-9">
                         <div class="project-media landscape">
                             <img src="assets/promotional.png" alt="Commercial Edit - Promotional Video" loading="lazy">
                             <div class="project-overlay">
@@ -149,8 +177,8 @@
                         </div>
                     </div>
 
-                    <!-- Project 3: Backbone of SAP -->
-                    <div class="project-card" data-video="https://www.youtube.com/embed/ZTqJB8IJUFI" data-aspect="9-16">
+                    <!-- Project 4: Backbone of SAP -->
+                    <div class="project-card" data-category="short-form" data-video="https://www.youtube.com/embed/ZTqJB8IJUFI" data-aspect="9-16">
                         <div class="project-media">
                             <img src="assets/webapp_sap.png" alt="Founder Branding - Webapp Backbone of SAP" loading="lazy">
                             <div class="project-overlay">
@@ -163,8 +191,8 @@
                         </div>
                     </div>
 
-                    <!-- Project 4: Many Homeowners -->
-                    <div class="project-card" data-video="https://www.youtube.com/embed/4k1FiOlZCrA" data-aspect="9-16">
+                    <!-- Project 5: Many Homeowners -->
+                    <div class="project-card" data-category="short-form" data-video="https://www.youtube.com/embed/4k1FiOlZCrA" data-aspect="9-16">
                         <div class="project-media">
                             <img src="assets/awareness.png" alt="Awareness Campaign - Many Homeowners" loading="lazy">
                             <div class="project-overlay">
@@ -177,8 +205,8 @@
                         </div>
                     </div>
 
-                    <!-- Project 5: Agency Promo -->
-                    <div class="project-card" data-video="https://www.youtube.com/embed/qWIHVacghY4" data-aspect="9-16">
+                    <!-- Project 6: Agency Promo -->
+                    <div class="project-card" data-category="short-form" data-video="https://www.youtube.com/embed/qWIHVacghY4" data-aspect="9-16">
                         <div class="project-media">
                             <img src="assets/promotional_reel.png" alt="Short Form Reel - Agency Promo" loading="lazy">
                             <div class="project-overlay">
@@ -738,6 +766,140 @@
 
 
 
+        <!-- Process / Editing Blueprint Section -->
+        <section id="process" class="process-section reveal">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Retention Architecture</span>
+                    <h2 class="section-title">The Editing Blueprint</h2>
+                    <p class="section-desc">How raw footage is transformed into high-velocity, algorithm-optimized visual stories that maximize watch time.</p>
+                </div>
+
+                <div class="process-grid">
+                    <!-- Step 1 -->
+                    <div class="process-card">
+                        <div class="process-card-top">
+                            <div class="process-step-num">01</div>
+                            <div class="process-icon"><i class="fa-solid fa-scissors"></i></div>
+                        </div>
+                        <h3 class="process-card-title">Pacing & Hook Architecture</h3>
+                        <p class="process-card-desc">Eliminating breath pauses, dead air, and filler phrases. Engineering a visceral first 3-second hook designed to halt infinite scrolling.</p>
+                        <ul class="process-card-bullets">
+                            <li><i class="fa-solid fa-check"></i> 0–3s High-Impact Hook</li>
+                            <li><i class="fa-solid fa-check"></i> Breath & Filler Removal</li>
+                            <li><i class="fa-solid fa-check"></i> Dynamic Beat Pacing</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="process-card">
+                        <div class="process-card-top">
+                            <div class="process-step-num">02</div>
+                            <div class="process-icon"><i class="fa-solid fa-layer-group"></i></div>
+                        </div>
+                        <h3 class="process-card-title">Retention & Pattern Interrupts</h3>
+                        <p class="process-card-desc">Introducing dynamic B-roll, 3D camera push-ins, match cuts, and visual switches every 2–4 seconds to prevent viewer swipe-away.</p>
+                        <ul class="process-card-bullets">
+                            <li><i class="fa-solid fa-check"></i> 2–4s Pattern Interrupts</li>
+                            <li><i class="fa-solid fa-check"></i> Framing & Zoom Shifts</li>
+                            <li><i class="fa-solid fa-check"></i> High-Context B-Roll Layers</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="process-card">
+                        <div class="process-card-top">
+                            <div class="process-step-num">03</div>
+                            <div class="process-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        </div>
+                        <h3 class="process-card-title">Kinetic Motion & Sound Design</h3>
+                        <p class="process-card-desc">Layering kinetic typography, custom vector graphics, risers, whooshes, sub-bass drops, and tactile UI sound effects.</p>
+                        <ul class="process-card-bullets">
+                            <li><i class="fa-solid fa-check"></i> Kinetic Subtitles & Accents</li>
+                            <li><i class="fa-solid fa-check"></i> 8–12 SFX Audio Layers</li>
+                            <li><i class="fa-solid fa-check"></i> Motion Graphics & VFX</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="process-card">
+                        <div class="process-card-top">
+                            <div class="process-step-num">04</div>
+                            <div class="process-icon"><i class="fa-solid fa-sliders"></i></div>
+                        </div>
+                        <h3 class="process-card-title">Color Grade & Mastering</h3>
+                        <p class="process-card-desc">Cinema-grade color transformation, natural skin tone perfection, LUFS-standardized dialogue mastering, and platform optimization.</p>
+                        <ul class="process-card-bullets">
+                            <li><i class="fa-solid fa-check"></i> Log / Flat Color Correction</li>
+                            <li><i class="fa-solid fa-check"></i> Broadcast Voice Leveling</li>
+                            <li><i class="fa-solid fa-check"></i> 4K/60fps High-Bitrate Export</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews & Testimonials Section -->
+        <section id="reviews" class="testimonials-section reveal">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Proof of Work</span>
+                    <h2 class="section-title">Client Praise & Results</h2>
+                    <p class="section-desc">What founders, creators, and agency leaders say about working with Lokesh.</p>
+                </div>
+
+                <div class="testimonials-grid">
+                    <!-- Review 1 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="testimonial-quote">"Lokesh transformed our raw founder recordings into engaging, viral short-form content. Our average view duration surged by over 45% in the first month."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar"><i class="fa-solid fa-user-tie"></i></div>
+                            <div class="author-info">
+                                <h4 class="author-name">Alex Rivera</h4>
+                                <span class="author-role">Founder, Brandfra AI</span>
+                            </div>
+                            <span class="author-metric">+180K Views</span>
+                        </div>
+                    </div>
+
+                    <!-- Review 2 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="testimonial-quote">"The sound design, pacing, and motion graphics are top tier. He delivers ahead of deadlines and requires zero micromanagement. Highly recommend!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar"><i class="fa-solid fa-video"></i></div>
+                            <div class="author-info">
+                                <h4 class="author-name">Marcus Vance</h4>
+                                <span class="author-role">Creative Director, Media Pulse</span>
+                            </div>
+                            <span class="author-metric">5.0 ★ Rated</span>
+                        </div>
+                    </div>
+
+                    <!-- Review 3 -->
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="testimonial-quote">"Working with Lokesh is frictionless. He understands algorithm retention hooks better than most agencies. His edits directly drove high-ticket client leads."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar"><i class="fa-solid fa-chart-line"></i></div>
+                            <div class="author-info">
+                                <h4 class="author-name">David Chen</h4>
+                                <span class="author-role">Growth Strategist & Creator</span>
+                            </div>
+                            <span class="author-metric">3x Output</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Stats Section -->
         <section id="stats" class="stats-section reveal">
             <div class="container">
@@ -748,11 +910,11 @@
                     </div>
                     <div class="stat-box">
                         <div class="stat-number" data-target="2">0</div>
-                        <div class="stat-label">Total Views Generated</div>
+                        <div class="stat-label">Total Views Generated (M+)</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number" data-target="10">0</div>
-                        <div class="stat-label">Happy Creators</div>
+                        <div class="stat-number" data-target="15">0</div>
+                        <div class="stat-label">Happy Creators & Brands</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-number" data-target="2">0</div>
@@ -776,20 +938,29 @@
                                 <i class="fa-solid fa-envelope"></i>
                                 <div>
                                     <h4>Email Me</h4>
-                                    <a href="mailto:rowwtulokesh1123@gmail.com">rowwtulokesh1123@gmail.com</a>
+                                    <a href="mailto:rowtulokesh1123@gmail.com">rowtulokesh1123@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-calendar-check"></i>
+                                <div>
+                                    <h4>Quick Intro</h4>
+                                    <a href="mailto:rowtulokesh1123@gmail.com?subject=15-Min%20Discovery%20Call%20Request">Schedule a 15-Min Discovery Call &rarr;</a>
                                 </div>
                             </div>
                             <div class="contact-item">
                                 <i class="fa-solid fa-location-dot"></i>
                                 <div>
                                     <h4>Based In</h4>
-                                    <p>India / Remote</p>
+                                    <p>India / Remote Worldwide</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="social-links">
-                            <a href="https://www.instagram.com/lokesh__verse/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="https://www.instagram.com/lokesh__verse/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="https://www.linkedin.com/in/rowtulokesh/?locale=en" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                            <a href="https://github.com/Lokesh-0009" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub"><i class="fa-brands fa-github"></i></a>
                         </div>
                     </div>
 
@@ -839,7 +1010,9 @@
                 <div class="footer-links">
                     <a href="#work">Work</a>
                     <a href="#software">Tools</a>
+                    <a href="#process">Process</a>
                     <a href="#services">Services</a>
+                    <a href="#reviews">Reviews</a>
                     <a href="#contact">Hire Me</a>
                 </div>
             </div>

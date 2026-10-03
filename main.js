@@ -304,7 +304,9 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'hero',     selector: '[href="#hero"]' },
         { id: 'work',     selector: '[href="#work"]' },
         { id: 'software', selector: '[href="#software"]' },
+        { id: 'process',  selector: '[href="#process"]' },
         { id: 'services', selector: '[href="#services"]' },
+        { id: 'reviews',  selector: '[href="#reviews"]' },
         { id: 'contact',  selector: '[href="#contact"]' },
     ];
 
@@ -320,15 +322,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.25 });
 
     sections.forEach(s => {
         const el = document.getElementById(s.id);
         if (el) sectionObserver.observe(el);
     });
 
-    // 4. PORTFOLIO FILTER MECHANISM (Simplified - no categories)
-    const projectCards = document.querySelectorAll('.project-card');
+    // 4. PORTFOLIO FILTER MECHANISM
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const allProjectCards = document.querySelectorAll('.project-card');
+
+    if (filterBtns.length > 0 && allProjectCards.length > 0) {
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.getAttribute('data-filter');
+
+                allProjectCards.forEach(card => {
+                    const category = card.getAttribute('data-category');
+                    if (filter === 'all' || category === filter) {
+                        card.classList.remove('filter-hidden');
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.92)';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'scale(1)';
+                        }, 50);
+                    } else {
+                        card.classList.add('filter-hidden');
+                    }
+                });
+            });
+        });
+    }
 
     // 5. STATISTICS COUNTER ANIMATION
     const statNumbers = document.querySelectorAll('.stat-number');
@@ -836,44 +865,44 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const onMouseDown = (e) => {
-            if (window.innerWidth <= 768) return;
-            const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
-            const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+            const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] && e.touches[0].clientX);
+            const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] && e.touches[0].clientY);
             if (clientX === undefined || clientY === undefined) return;
 
             // Check if user clicked on an interactive HTML node to prevent blocking normal clicks
             const target = e.target;
-            const isInteractive = target.closest('a, button, input, select, textarea, [role="button"], .project-card, .mobile-menu-toggle, .btn-primary, .btn-secondary, .social-links a, .nav-link, .profile-socials-pill a, .contact-item a');
+            const isInteractive = target && target.closest && target.closest('a, button, input, select, textarea, [role="button"], .project-card, .mobile-menu-toggle, .btn-primary, .btn-secondary, .social-links a, .nav-link, .profile-socials-pill a, .contact-item a');
             if (isInteractive) return;
 
-            // Search for closest particle intersection
-            let closestParticle = null;
-            let minDist = Infinity;
-            
-            for (let i = 0; i < particles.length; i++) {
-                const p = particles[i];
-                const dist = Math.hypot(p.x - clientX, p.y - clientY);
-                // Size-based selection limit + touch padding (15px)
-                if (dist < p.size + 15 && dist < minDist) {
-                    minDist = dist;
-                    closestParticle = p;
-                }
-            }
+            mouse.x = clientX;
+            mouse.y = clientY;
 
-            if (closestParticle) {
-                draggedParticle = closestParticle;
-                draggedParticle.isDragging = true;
-                draggedParticle.dragAlpha = 0.0; // disable anti-gravity
-                mouse.x = clientX;
-                mouse.y = clientY;
-                if (e.cancelable) e.preventDefault();
+            // Desktop-only draggable magnetic particle
+            if (window.innerWidth > 768) {
+                let closestParticle = null;
+                let minDist = Infinity;
+                
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    const dist = Math.hypot(p.x - clientX, p.y - clientY);
+                    if (dist < p.size + 15 && dist < minDist) {
+                        minDist = dist;
+                        closestParticle = p;
+                    }
+                }
+
+                if (closestParticle) {
+                    draggedParticle = closestParticle;
+                    draggedParticle.isDragging = true;
+                    draggedParticle.dragAlpha = 0.0;
+                    if (e.cancelable) e.preventDefault();
+                }
             }
         };
 
         const onMouseMove = (e) => {
-            if (window.innerWidth <= 768) return;
-            const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
-            const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+            const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] && e.touches[0].clientX);
+            const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] && e.touches[0].clientY);
             if (clientX === undefined || clientY === undefined) return;
 
             mouse.x = clientX;
@@ -881,7 +910,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const onMouseUp = () => {
-            if (window.innerWidth <= 768) return;
             if (draggedParticle) {
                 draggedParticle.isDragging = false;
                 draggedParticle = null;
@@ -1105,24 +1133,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const resizeCanvas = () => {
             width = window.innerWidth;
             height = window.innerHeight;
-            
-            if (width <= 768) {
-                if (animationFrameId) {
-                    cancelAnimationFrame(animationFrameId);
-                    animationFrameId = null;
-                }
-                ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
-                particles = [];
-                return;
-            }
-            
             particleCanvas.width = width * dpr;
             particleCanvas.height = height * dpr;
             ctx.scale(dpr, dpr);
             
-            // Scaled adaptive density count based on screen width
-            // ~40 on mobile up to ~180 on wide screens
-            const count = Math.min(Math.floor((width * height) / 9500), 220);
+            const isMobile = width <= 768;
+            // Lightweight density on mobile (~24-32 bubbles) vs full density on desktop (up to 220)
+            const count = isMobile ? Math.min(Math.floor((width * height) / 24000) + 14, 32) : Math.min(Math.floor((width * height) / 9500), 220);
             
             if (particles.length < count) {
                 const diff = count - particles.length;
@@ -1141,66 +1158,62 @@ document.addEventListener('DOMContentLoaded', () => {
         const initParticles = () => {
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
-            if (window.innerWidth > 768) {
-                animate(0);
-            }
+            animate(0);
         };
 
         const animate = (timestamp) => {
-            if (window.innerWidth <= 768) {
-                ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
-                animationFrameId = null;
-                return;
-            }
             ctx.clearRect(0, 0, width, height);
             
             const time = timestamp || 0;
+            const isMobile = width <= 768;
 
-            // 1. Double loop to handle Soft Collisions and Clustering Forces
-            for (let i = 0; i < particles.length; i++) {
-                const p1 = particles[i];
-                for (let j = i + 1; j < particles.length; j++) {
-                    const p2 = particles[j];
-                    const dx = p2.x - p1.x;
-                    const dy = p2.y - p1.y;
-                    
-                    // Quick boundary reject check before expensive math
-                    if (Math.abs(dx) > 180 || Math.abs(dy) > 180) continue;
-                    
-                    const dist = Math.hypot(dx, dy);
-                    const minDist = p1.size + p2.size;
-
-                    // Soft collisions push-back
-                    if (dist < minDist) {
-                        const overlap = minDist - dist;
-                        const angle = Math.atan2(dy, dx);
-                        const force = overlap * 0.08;
+            // 1. Soft Collisions and Clustering Forces - run on desktop for rich dynamics, skipped on mobile to save battery and guarantee 60fps
+            if (!isMobile) {
+                for (let i = 0; i < particles.length; i++) {
+                    const p1 = particles[i];
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const dx = p2.x - p1.x;
+                        const dy = p2.y - p1.y;
                         
-                        p1.vx -= (Math.cos(angle) * force) / p1.mass;
-                        p1.vy -= (Math.sin(angle) * force) / p1.mass;
-                        p2.vx += (Math.cos(angle) * force) / p2.mass;
-                        p2.vy += (Math.sin(angle) * force) / p2.mass;
-                    } 
-                    // Clustering attraction forces
-                    else if (dist < 180) {
-                        const force = (180 - dist) * 0.0001;
-                        const angle = Math.atan2(dy, dx);
+                        // Quick boundary reject check before expensive math
+                        if (Math.abs(dx) > 180 || Math.abs(dy) > 180) continue;
                         
-                        p1.vx += (Math.cos(angle) * force) / p1.mass;
-                        p1.vy += (Math.sin(angle) * force) / p1.mass;
-                        p2.vx -= (Math.cos(angle) * force) / p2.mass;
-                        p2.vy -= (Math.sin(angle) * force) / p2.mass;
-                    }
+                        const dist = Math.hypot(dx, dy);
+                        const minDist = p1.size + p2.size;
 
-                    // Optional connecting lines inside AI cloud
-                    if (dist < 90) {
-                        const lineAlpha = ((90 - dist) / 90) * 0.06;
-                        ctx.strokeStyle = `rgba(109, 40, 217, ${lineAlpha})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
+                        // Soft collisions push-back
+                        if (dist < minDist) {
+                            const overlap = minDist - dist;
+                            const angle = Math.atan2(dy, dx);
+                            const force = overlap * 0.08;
+                            
+                            p1.vx -= (Math.cos(angle) * force) / p1.mass;
+                            p1.vy -= (Math.sin(angle) * force) / p1.mass;
+                            p2.vx += (Math.cos(angle) * force) / p2.mass;
+                            p2.vy += (Math.sin(angle) * force) / p2.mass;
+                        } 
+                        // Clustering attraction forces
+                        else if (dist < 180) {
+                            const force = (180 - dist) * 0.0001;
+                            const angle = Math.atan2(dy, dx);
+                            
+                            p1.vx += (Math.cos(angle) * force) / p1.mass;
+                            p1.vy += (Math.sin(angle) * force) / p1.mass;
+                            p2.vx += (Math.cos(angle) * force) / p2.mass;
+                            p2.vy += (Math.sin(angle) * force) / p2.mass;
+                        }
+
+                        // Optional connecting lines inside AI cloud
+                        if (dist < 90) {
+                            const lineAlpha = ((90 - dist) / 90) * 0.06;
+                            ctx.strokeStyle = `rgba(109, 40, 217, ${lineAlpha})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
                     }
                 }
             }
@@ -1215,5 +1228,70 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         initParticles();
+    }
+
+    // ==========================================================================
+    // 10. BESPOKE MAGNETIC VIDEO CURSOR
+    // ==========================================================================
+    const cursor = document.getElementById('custom-cursor');
+    const cursorDot = document.getElementById('custom-cursor-dot');
+
+    if (cursor && cursorDot && window.innerWidth > 768) {
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let cursorX = mouseX;
+        let cursorY = mouseY;
+        let dotX = mouseX;
+        let dotY = mouseY;
+        let isCursorActive = false;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            if (!isCursorActive) {
+                isCursorActive = true;
+                cursor.classList.add('cursor-active');
+                cursorDot.classList.add('cursor-active');
+            }
+        });
+
+        document.addEventListener('mouseleave', () => {
+            isCursorActive = false;
+            cursor.classList.remove('cursor-active');
+            cursorDot.classList.remove('cursor-active');
+        });
+
+        // Smooth cursor interpolation loop
+        const renderCursor = () => {
+            cursorX += (mouseX - cursorX) * 0.18;
+            cursorY += (mouseY - cursorY) * 0.18;
+            dotX += (mouseX - dotX) * 0.55;
+            dotY += (mouseY - dotY) * 0.55;
+
+            cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+            cursorDot.style.transform = `translate3d(${dotX}px, ${dotY}px, 0) translate(-50%, -50%)`;
+
+            requestAnimationFrame(renderCursor);
+        };
+        requestAnimationFrame(renderCursor);
+
+        // Hover states on interactive cards vs buttons
+        document.addEventListener('mouseover', (e) => {
+            const projectCard = e.target.closest('.project-card');
+            if (projectCard) {
+                cursor.classList.add('cursor-card');
+                cursor.classList.remove('cursor-hover');
+                return;
+            }
+
+            const interactive = e.target.closest('a, button, .filter-btn, .social-btn, input, select, textarea');
+            if (interactive) {
+                cursor.classList.add('cursor-hover');
+                cursor.classList.remove('cursor-card');
+            } else {
+                cursor.classList.remove('cursor-hover', 'cursor-card');
+            }
+        });
     }
 });
