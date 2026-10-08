@@ -607,6 +607,26 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
+        // Check for Vimeo URLs (e.g. vimeo.com/123456789 or player.vimeo.com/video/123456789)
+        const vimeoMatch = input.match(/(?:https?:\/\/)?(?:www\.)?(?:player\.)?vimeo\.com\/(?:video\/)?([0-9]+)/i);
+        if (vimeoMatch) {
+            return {
+                type: 'vimeo',
+                isShort: false,
+                url: `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1&title=0&byline=0&portrait=0`
+            };
+        }
+
+        // Check for Streamable URLs (e.g. streamable.com/xxxxxx)
+        const streamableMatch = input.match(/(?:https?:\/\/)?(?:www\.)?streamable\.com\/([a-zA-Z0-9]+)/i);
+        if (streamableMatch && !input.includes('/e/')) {
+            return {
+                type: 'iframe',
+                isShort: false,
+                url: `https://streamable.com/e/${streamableMatch[1]}?autoplay=1`
+            };
+        }
+
         // Google Drive check
         if (input.includes('drive.google.com')) {
             let embedUrl = input;
@@ -619,7 +639,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return { type: 'drive', url: embedUrl };
         }
 
-        // Direct video URL
+        // Direct video URL / Local MP4
         return { type: 'direct', url: input };
     };
 
@@ -636,8 +656,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (videoWrapper && parsed.url) {
             const isMobile = window.innerWidth <= 768;
 
-            if (parsed.type === 'youtube' || parsed.type === 'iframe' || parsed.type === 'drive') {
-                // Hide custom HTML5 controls for iframe/YouTube embeds
+            if (parsed.type === 'youtube' || parsed.type === 'iframe' || parsed.type === 'drive' || parsed.type === 'vimeo') {
+                // Hide custom HTML5 controls for iframe/YouTube/Vimeo/Drive embeds
                 if (customVideoControls) customVideoControls.classList.add('hidden');
 
                 videoWrapper.innerHTML = `<iframe id="modal-iframe" src="${parsed.url}" style="width:100%;height:100%;border:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
